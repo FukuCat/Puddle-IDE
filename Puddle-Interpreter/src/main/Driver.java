@@ -20,11 +20,6 @@ import java.nio.charset.StandardCharsets;
 public class Driver {
     public static void main(String[] args){
         new MainWindow("Puddle IDE",300,300);
-        try {
-            new AbstractSyntaxTreePrinter().print( new ParserFacade().parse("rcs/hello_world.pdl", "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void testKotlin(){

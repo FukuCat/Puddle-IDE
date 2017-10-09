@@ -10,7 +10,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 public class ParserFacade {
-    public KotlinParser.KotlinFileContext parse(String path, String charset) throws IOException {
+
+    public KotlinParser.KotlinFileContext parseString(String text) throws IOException {
+        //charset = "UTF-8"
+        KotlinLexer lexer = new KotlinLexer(CharStreams.fromString(text));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        printTokens(tokens);
+        KotlinParser parser = new KotlinParser(tokens);
+        return parser.kotlinFile();
+    }
+
+    public KotlinParser.KotlinFileContext parseFile(String path, String charset) throws IOException {
         //charset = "UTF-8"
         KotlinLexer lexer = new KotlinLexer(CharStreams.fromFileName(path, Charset.forName(charset)));
         CommonTokenStream tokens = new CommonTokenStream(lexer);

@@ -1,5 +1,7 @@
 package view.panel;
 
+import model.SharedData;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ public class TextEditorPanel extends JPanel {
     JScrollPane scl_scroll;
     public TextEditorPanel(int w, int h){
         super();
-        txt_textArea = new JTextArea();
+        txt_textArea = SharedData.getInstance().getEditorTextArea();
         txt_textArea.setEditable(true);
         txt_textArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         scl_scroll = new JScrollPane (txt_textArea);
