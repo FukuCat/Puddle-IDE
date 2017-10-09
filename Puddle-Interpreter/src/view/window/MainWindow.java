@@ -16,15 +16,15 @@ public class MainWindow extends JFrame{
         this.setTitle(title);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.setSize(new Dimension(w, h));
+        this.setPreferredSize(new Dimension(w, h));
         JPanel container = new JPanel();
         FlowLayout layout = new FlowLayout();
         layout.setVgap(0);
         layout.setHgap(0);
         container.setLayout(layout);
-        container.add(new ToolBarPanel(100,20));
-        container.add(new TextEditorPanel(100,20));
-        container.add(new ConsolePanel(100,20));
+        container.add(new ToolBarPanel(w,36));
+        container.add(new TextEditorPanel(w,(h - 72)/2));
+        container.add(new ConsolePanel(w,(h - 72)/2));
 
         // center
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
