@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame{
-    int w, h;
-    String title;
 
     private static final int TOOLBAR_HEIGHT = 36;
 
@@ -31,8 +29,8 @@ public class MainWindow extends JFrame{
 
         // center
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) (dimension.getWidth() / 2);
-        int y = (int) (dimension.getHeight() / 2);
+        int x = (int) (dimension.getWidth() / 2) - w/2;
+        int y = (int) (dimension.getHeight() / 2) - h/2;
         this.setLocation(x, y);
 
         this.add(container);

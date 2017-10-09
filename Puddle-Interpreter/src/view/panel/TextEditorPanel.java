@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TextEditorPanel extends JPanel {
-    int w, h;
     JTextArea txt_textArea;
     JScrollPane scl_scroll;
     public TextEditorPanel(int w, int h){

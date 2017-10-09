@@ -1,5 +1,6 @@
 package view.actions;
 
+import Utils.ConsoleLogger;
 import model.SharedData;
 
 import javax.swing.*;
@@ -30,13 +31,12 @@ public class OpenAction implements ActionListener {
 
             filename = c.getSelectedFile().getName();
             dir = c.getCurrentDirectory().toString();
-
+            SharedData.getInstance().setEditorText(openFile(dir +"\\"+ filename,"UTF-8"));
         }
         if (rVal == JFileChooser.CANCEL_OPTION) {
 
         }
-        SharedData.getInstance().setEditorText(openFile(dir +"\\"+ filename,"UTF-8"));
-    }
+        }
 
     private String openFile(String path, String charset){
         StringBuilder sb = new StringBuilder();
@@ -44,6 +44,7 @@ public class OpenAction implements ActionListener {
         Charset encoding = Charset.forName(charset);
         // Path to the file
         Path file = Paths.get(path);
+        ConsoleLogger.log("Opened: "+path);
 
         // Try with resources to close reader at the end.
         try(BufferedReader br = Files.newBufferedReader(file, encoding)) {

@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 
 public class Driver {
     public static void main(String[] args){
-        new MainWindow("Puddle IDE",900,720);
+        new MainWindow("Puddle IDE",1280,720);
     }
 
     public static void testKotlin(){

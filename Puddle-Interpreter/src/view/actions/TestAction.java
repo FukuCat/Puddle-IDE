@@ -13,6 +13,7 @@ public class TestAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
+            SharedData.getInstance().clearConsole();
             new AbstractSyntaxTreePrinter().print( new ParserFacade().parseString(SharedData.getInstance().getEditorText()));
         } catch (IOException e1) {
             e1.printStackTrace();

@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ToolBarPanel extends JPanel {
-    int w, h;
     private ArrayList<JButton> btn_array;
 
     public ToolBarPanel(int w, int h){

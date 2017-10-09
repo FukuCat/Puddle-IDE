@@ -20,12 +20,13 @@ public class AbstractSyntaxTreePrinter {
             }
             ConsoleLogger.log("["+ruleName + "]: [" + ctx.getText()+"]\n");
         }
+        //element.getChildCount() > 1
         for (int i=0;i<ctx.getChildCount();i++) {
             ParseTree element = ctx.getChild(i);
             if (element instanceof RuleContext) {
                 explore((RuleContext)element,
-                        element.getChildCount() > 1? indentation + 1: indentation,
-                        element.getChildCount() > 1);
+                        true? indentation + 1: indentation,
+                        true);
             }
         }
     }

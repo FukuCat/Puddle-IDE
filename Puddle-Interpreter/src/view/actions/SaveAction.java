@@ -1,5 +1,6 @@
 package view.actions;
 
+import Utils.ConsoleLogger;
 import model.SharedData;
 
 import javax.swing.*;
@@ -42,8 +43,7 @@ public class SaveAction implements ActionListener {
             File logFile = new File(dir+"\\"+filename);
 
             // This will output the full path where the file will be written to...
-            System.out.println(logFile.getCanonicalPath());
-
+            ConsoleLogger.log("Saved: "+logFile.getCanonicalPath());
             writer = new BufferedWriter(new FileWriter(logFile));
             writer.write(text);
         } catch (Exception e) {
