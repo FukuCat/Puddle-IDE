@@ -15,6 +15,7 @@ public class ConsolePanel extends JPanel {
         txt_textArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         txt_textArea.setForeground(Color.WHITE);
         txt_textArea.setBackground(Color.BLACK);
+        txt_textArea.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         scl_scroll = new JScrollPane(txt_textArea);
         scl_scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scl_scroll.setPreferredSize(new Dimension(w - 16, h));

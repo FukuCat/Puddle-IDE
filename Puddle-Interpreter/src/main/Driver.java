@@ -1,27 +1,13 @@
 package main;
 
-import main.antlr.AbstractSyntaxTreePrinter;
-import main.antlr.ParserFacade;
-import main.antlr.kotlin.KotlinLexer;
-import main.antlr.kotlin.KotlinParser;
-import main.scanner.AntlrPuddleListener;
-import main.antlr.puddle.PuddleLexer;
-import main.antlr.puddle.PuddleParser;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import view.window.MainWindow;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class Driver {
     public static void main(String[] args){
         new MainWindow("Puddle IDE",1280,720);
     }
-
+    /*
     public static void testKotlin(){
         ANTLRInputStream stream = null;
         try {
@@ -79,5 +65,5 @@ public class Driver {
         File initialFile = new File(path);
         return new FileInputStream(initialFile);
     }
-
+    */
 }
