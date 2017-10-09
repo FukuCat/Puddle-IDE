@@ -1,5 +1,6 @@
 package main.antlr;
 
+import Utils.ConsoleLogger;
 import main.antlr.kotlin.KotlinLexer;
 import main.antlr.kotlin.KotlinParser;
 import model.SharedData;
@@ -31,16 +32,11 @@ public class ParserFacade {
     }
 
     private void printTokens(CommonTokenStream tokens){
-        System.out.println("Printing Tokens...");
-        SharedData.getInstance().appendConsoleText("Printing Tokens...\n");
-        System.out.println("Token count: " + tokens.getNumberOfOnChannelTokens());
-
-        SharedData.getInstance().appendConsoleText("Token count: " + tokens.getNumberOfOnChannelTokens()+"\n");
+        ConsoleLogger.log("Printing Tokens...\n");
+        ConsoleLogger.log("Token count: " + tokens.getNumberOfOnChannelTokens()+"\n");
         for(Token t: tokens.getTokens()){
-            System.out.println("["+t.getText()+"]");
-            SharedData.getInstance().appendConsoleText("["+t.getText()+"]\n");
+            ConsoleLogger.log("["+t.getText()+"]\n");
         }
-        System.out.println("Done.");
-        SharedData.getInstance().appendConsoleText("Done.\n");
+        ConsoleLogger.log("Done.\n");
     }
 }

@@ -11,20 +11,23 @@ public class MainWindow extends JFrame{
     int w, h;
     String title;
 
+    private static final int TOOLBAR_HEIGHT = 36;
+
     public MainWindow(String title, int w, int h){
         super();
         this.setTitle(title);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(w, h));
+        this.setPreferredSize(new Dimension(w, h + TOOLBAR_HEIGHT));
+        this.setResizable(false);
         JPanel container = new JPanel();
         FlowLayout layout = new FlowLayout();
         layout.setVgap(0);
         layout.setHgap(0);
         container.setLayout(layout);
-        container.add(new ToolBarPanel(w,36));
-        container.add(new TextEditorPanel(w,(h - 72)/2));
-        container.add(new ConsolePanel(w,(h - 72)/2));
+        container.add(new ToolBarPanel(w,TOOLBAR_HEIGHT));
+        container.add(new TextEditorPanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .70)));
+        container.add(new ConsolePanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .30)));
 
         // center
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

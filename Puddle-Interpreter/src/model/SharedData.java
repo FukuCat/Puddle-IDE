@@ -28,6 +28,8 @@ public class SharedData {
         editorTextArea.setText(text);
     }
 
+    public void clearConsole(){consoleTextArea.setText("");}
+
     public String getEditorText(){
         return editorTextArea.getText();
     }
