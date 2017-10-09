@@ -12,13 +12,14 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import view.window.MainWindow;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class Driver {
     public static void main(String[] args){
-
+        new MainWindow("Puddle IDE",300,300);
         try {
             new AbstractSyntaxTreePrinter().print( new ParserFacade().parse("rcs/hello_world.pdl", "UTF-8"));
         } catch (IOException e) {
