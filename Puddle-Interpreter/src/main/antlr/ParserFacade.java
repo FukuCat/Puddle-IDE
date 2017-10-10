@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 public class ParserFacade {
 
@@ -32,10 +33,13 @@ public class ParserFacade {
     }
 
     private void printTokens(CommonTokenStream tokens){
+
+        Vocabulary vocab = KotlinLexer.VOCABULARY;
+
         ConsoleLogger.log("Printing Tokens...\n");
         ConsoleLogger.log("Token count: " + tokens.getNumberOfOnChannelTokens()+"\n");
         for(Token t: tokens.getTokens()){
-            ConsoleLogger.log("["+t.getText()+"]\n");
+            ConsoleLogger.log("["+vocab.getSymbolicName(t.getType())+"]: ["+t.getText()+"]\n");
         }
         ConsoleLogger.log("Done.\n");
     }
