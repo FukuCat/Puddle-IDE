@@ -1,0 +1,23 @@
+fun main(args : Array<String>) {
+
+  var x : Int = 0;
+  var _veryWeirdIdentifier567: Float = 999.9f;
+  var y: Boolean = (5>4 && true || (false && x == 0));
+  var myArray = Array(10);
+  scan("What is the input", x); // Ask for user input
+  print("Input: " + x); // Print the input
+  if( x != 0){
+	// INTENTIONAL
+  } else {
+    /* NTENTIONAL
+    * DSD
+    * dsd
+    */
+  }
+  while(x > 5){
+    for(i in 0 .. x){
+      print("Something");
+    }
+    x--;
+  }
+}

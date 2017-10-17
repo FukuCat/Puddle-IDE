@@ -44,7 +44,7 @@ public class OpenAction implements ActionListener {
         Charset encoding = Charset.forName(charset);
         // Path to the file
         Path file = Paths.get(path);
-        ConsoleLogger.log("Opened: "+path);
+        ConsoleLogger.log("Opened: \""+path+"\"\n");
 
         // Try with resources to close reader at the end.
         try(BufferedReader br = Files.newBufferedReader(file, encoding)) {

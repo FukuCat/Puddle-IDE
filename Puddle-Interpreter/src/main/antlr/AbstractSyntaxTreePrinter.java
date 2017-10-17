@@ -8,25 +8,26 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class AbstractSyntaxTreePrinter {
     public void print(RuleContext ctx) {
-        //ConsoleLogger.log("Printing Abstract Syntax Tree...\n");
+        ConsoleLogger.log("Printing Abstract Syntax Tree...\n");
         explore(ctx, 0, true);
-        //ConsoleLogger.log("Done.\n");
+        ConsoleLogger.log("Done.\n");
     }
-    private void explore(RuleContext ctx, int indentation, boolean isImportant) {
+    private void explore(RuleContext ctx, int indentation, boolean doPrint) {
         String ruleName = KotlinParser.ruleNames[ctx.getRuleIndex()];
-        if(isImportant) {
+        if(doPrint) {
             for (int i = 0; i < indentation; i++) {
-                //ConsoleLogger.log(" ");
+                ConsoleLogger.log(" ");
             }
-            //ConsoleLogger.log("["+ruleName + "]: [" + ctx.getText()+"]\n");
+            ConsoleLogger.log("["+ruleName + ":"+ctx.getRuleIndex()+"]: [" + ctx.getText()+"]\n");
         }
-        //element.getChildCount() > 1
+        boolean isImportant;
         for (int i=0;i<ctx.getChildCount();i++) {
             ParseTree element = ctx.getChild(i);
+            isImportant = element.getChildCount() > 1;
             if (element instanceof RuleContext) {
                 explore((RuleContext)element,
-                        true? indentation + 1: indentation,
-                        true);
+                        isImportant? indentation + 1: indentation,
+                        isImportant);
             }
         }
     }

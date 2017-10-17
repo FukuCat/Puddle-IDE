@@ -39,7 +39,7 @@ public class ParserFacade {
         ConsoleLogger.log("Printing Tokens...\n");
         ConsoleLogger.log("Token count: " + tokens.getNumberOfOnChannelTokens()+"\n");
         for(Token t: tokens.getTokens()){
-            ConsoleLogger.log("["+vocab.getSymbolicName(t.getType())+"]: ["+t.getText()+"]\n");
+            ConsoleLogger.log("["+vocab.getSymbolicName(t.getType())+":"+t.getType()+"]: ["+t.getText()+"]\n");
         }
         ConsoleLogger.log("Done.\n");
     }

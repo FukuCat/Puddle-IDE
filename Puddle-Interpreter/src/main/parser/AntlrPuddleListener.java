@@ -1,4 +1,4 @@
-package main.scanner;
+package main.parser;
 
 import main.antlr.puddle.PuddleBaseListener;
 import main.antlr.puddle.PuddleParser;
