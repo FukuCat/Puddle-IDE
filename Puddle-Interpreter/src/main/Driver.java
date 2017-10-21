@@ -1,69 +1,42 @@
 package main;
 
+import main.antlr.KotlinParserFacade;
+import main.antlr.kotlin.listener.AntlrKotlinListener;
+import model.SharedData;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import view.window.MainWindow;
 
+import java.io.IOException;
 
+/*
+* cd "C:\Users\fukon\Desktop\New folder\"
+* java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "UnicodeClasses.g4"
+* java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinLexer.g4"
+* java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinParser.g4"
+* */
 public class Driver {
     public static void main(String[] args){
-        new MainWindow("Puddle IDE",1280,720);
-    }
-    /*
-    public static void testKotlin(){
-        ANTLRInputStream stream = null;
+        //new MainWindow("Puddle IDE",1280,720);
+        String text =
+                "fun main(args : Array<String>) {\n" +
+                        "    val x: Int = 0;\n" +
+                        "\tval _veryWeirdIdentifier567: Float = 999.9;\n" +
+                        "\tval y = (5 > 4 && true) || (false && !(x==0));\n" +
+                        "\tval myArray: Array<Integer> = Array(10);\n" +
+                        "\t\n" +
+                        "\tscan(\"What is the input: \" ,x)\n" +
+                        "\tprint(\"Input: \" ,x)\n" +
+                        "\t\n" +
+                        "\tfor(i in 1..5) {\n" +
+                        "\t\tprint(\"Hello world\");\n" +
+                        "\t}\n" +
+                        "}";
+        KotlinParserFacade parser = new KotlinParserFacade();
         try {
-            stream = new ANTLRInputStream(fileToInputStream("rcs/hello_world.pdl"));
+            ParseTreeWalker.DEFAULT.walk(new AntlrKotlinListener(), parser.parseString(text));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Get our lexer
-        KotlinLexer lexer = new KotlinLexer((org.antlr.v4.runtime.CharStream) stream);
 
-        // Get a list of matched tokens
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        System.out.println(tokens.getNumberOfOnChannelTokens());
-        for(Token t: tokens.getTokens())
-            System.out.println("["+t.getText()+"]");
-
-        // Pass the tokens to the parser
-        KotlinParser parser = new KotlinParser(tokens);
-
-
-        // Walk it and attach our listener
-        parser.kotlinFile();
     }
-
-    public static void testPuddle(){
-        ANTLRInputStream stream = null;
-        try {
-            stream = new ANTLRInputStream(fileToInputStream("rcs/test.pdl"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Get our lexer
-        PuddleLexer lexer = new PuddleLexer((org.antlr.v4.runtime.CharStream) stream);
-
-        // Get a list of matched tokens
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        // Pass the tokens to the parser
-        PuddleParser parser = new PuddleParser(tokens);
-
-
-        // Walk it and attach our listener
-        ParseTreeWalker walker = new ParseTreeWalker();
-        AntlrPuddleListener listener = new AntlrPuddleListener();
-        // Specify our entry point
-        walker.walk(listener, (ParseTree) parser.main());
-    }
-
-    public static InputStream stringToInputStream(String text) throws UnsupportedEncodingException{
-        return new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8.name()));
-    }
-
-    public static InputStream fileToInputStream(String path) throws FileNotFoundException{
-        File initialFile = new File(path);
-        return new FileInputStream(initialFile);
-    }
-    */
 }

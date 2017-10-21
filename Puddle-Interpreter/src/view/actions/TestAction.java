@@ -1,14 +1,8 @@
 package view.actions;
 
-import main.antlr.AbstractSyntaxTreePrinter;
-import main.antlr.ParserFacade;
-import main.antlr.kotlin.KotlinLexer;
-import main.antlr.kotlin.KotlinParser;
-import main.parser.AntlrKotlinListener;
+import main.antlr.KotlinParserFacade;
+import main.antlr.kotlin.listener.AntlrKotlinListener;
 import model.SharedData;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.awt.event.ActionEvent;
@@ -20,27 +14,18 @@ public class TestAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         SharedData.getInstance().clearConsole();
-        //new AbstractSyntaxTreePrinter().print( new ParserFacade().parseString(SharedData.getInstance().getEditorText()));
+        //new AbstractSyntaxTreePrinter().print( new KotlinParserFacade().parseString(SharedData.getInstance().getEditorText()));
 
         parse();
 
     }
 
     public void parse(){
-        ANTLRInputStream stream = null;
-        stream = new ANTLRInputStream(SharedData.getInstance().getEditorText());
-        // Get our lexer
-        KotlinLexer lexer = new KotlinLexer(stream);
-
-        // Get a list of matched tokens
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        // Pass the tokens to the parser
-        KotlinParser parser = new KotlinParser(tokens);
-
-        // Walk it and attach our listener
-        parser.kotlinFile();
-        AntlrKotlinListener listener = new AntlrKotlinListener();
-        ParseTreeWalker.DEFAULT.walk(listener, parser.kotlinFile());
+        KotlinParserFacade parser = new KotlinParserFacade();
+        try {
+            ParseTreeWalker.DEFAULT.walk(new AntlrKotlinListener(), parser.parseString(SharedData.getInstance().getEditorText()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

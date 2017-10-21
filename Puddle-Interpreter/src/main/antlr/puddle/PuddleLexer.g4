@@ -1,4 +1,3 @@
-
 /**
  * Kotlin language Antl4 grammar
  * based on Kotlin's official grammar https://kotlinlang.org/docs/reference/grammar.html
@@ -142,15 +141,12 @@ OP_NOT: '!';
 SQ_OPEN: '[';
 SQ_CLOSE: ']';
 
-KEYWORD_val : 'val';
-KEYWORD_var : VAR_int | VAR_float | VAR_char | VAR_string;
-
-
-
-VAR_int : 'Int';
-VAR_float : 'Float';
-VAR_char : 'Char';
-VAR_string : 'String';
+VARTYPE_Integer : 'Integer';
+VARTYPE_Long : 'Long';
+VARTYPE_Float : 'Float';
+VARTYPE_Double : 'Double';
+VARTYPE_Char : 'Char';
+VARTYPE_String : 'String';
 
 KEYWORD_by : 'by';
 

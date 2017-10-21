@@ -1,6 +1,6 @@
 package view.actions;
 
-import Utils.ConsoleLogger;
+import utils.ConsoleLogger;
 import model.SharedData;
 
 import javax.swing.*;
