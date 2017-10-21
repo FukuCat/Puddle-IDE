@@ -13,29 +13,39 @@ import java.util.List;
 
 public class ParserErrorListener extends BaseErrorListener {
 
-    private String message = null;
+    private boolean hasError = false;
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
-        if(!stack.isEmpty()){
-            switch (stack.get(0)){
-                case "functionValueParameters":
-                    ConsoleLogger.err(
-                            "[SyntaxError]" +
-                            "[Line "+line+":"+charPositionInLine+"]" +
-                            "["+((Token) offendingSymbol).getText()+"]" +
-                            "[ Missing close parenthesis. ]\n");
-                    break;
-                    default:
-                        Collections.reverse(stack);
-                        ConsoleLogger.err("Rule Stack: "+stack+"\n");
+        if(!hasError) {
+            List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
+            if (!stack.isEmpty()) {
+                switch (stack.get(0)) {
+                    case "functionValueParameters":
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
-                                        "[Line "+line+":"+charPositionInLine+"]" +
-                                        "["+((Token) offendingSymbol).getText()+"]" +
-                                        "["+msg+"]\n");
+                                        "[Line " + line + ":" + charPositionInLine + "]" +
+                                        "[" + ((Token) offendingSymbol).getText() + "]" +
+                                        "[ Missing close parenthesis. ]\n");
+                        break;
+                    case "block":
+                        ConsoleLogger.err(
+                                "[SyntaxError]" +
+                                        "[Line " + line + ":" + charPositionInLine + "]" +
+                                        "[" + ((Token) offendingSymbol).getText() + "]" +
+                                        "[ Check if functions are called properly. ]\n");
+                        break;
+                    default:
+                        Collections.reverse(stack);
+                        ConsoleLogger.err("Rule Stack: " + stack + "\n");
+                        ConsoleLogger.err(
+                                "[SyntaxError]" +
+                                        "[Line " + line + ":" + charPositionInLine + "]" +
+                                        "[" + ((Token) offendingSymbol).getText() + "]" +
+                                        "[" + msg + "]\n");
+                }
             }
+            hasError = true;
         }
     }
 

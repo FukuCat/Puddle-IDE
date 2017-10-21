@@ -18,7 +18,7 @@ public class Driver {
     public static void main(String[] args){
         //new MainWindow("Puddle IDE",1280,720);
         String text =
-                "fun main(args : Array<String> {\n" +
+                "fun main(args : Array<String>) {\n" +
                         "    val x: Int = 0;\n" +
                         "\tval _veryWeirdIdentifier567: Float = 999.9;\n" +
                         "\tval y = (5 > 4 && true) || (false && !(x==0));\n" +

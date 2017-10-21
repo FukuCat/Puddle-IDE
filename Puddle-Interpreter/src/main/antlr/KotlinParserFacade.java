@@ -18,13 +18,13 @@ public class KotlinParserFacade {
         KotlinLexer lexer = new KotlinLexer(CharStreams.fromString(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // print tokens
-        printTokens(tokens);
+        //printTokens(tokens);
         KotlinParser parser = new KotlinParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(new ParserErrorListener());
         parser.setErrorHandler(new ParserErrorStrategy());
         // print syntax tree
-        printSyntaxTree(parser.kotlinFile());
+        //printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
     }
 
@@ -33,13 +33,13 @@ public class KotlinParserFacade {
         KotlinLexer lexer = new KotlinLexer(CharStreams.fromFileName(path, Charset.forName(charset)));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // print tokens
-        printTokens(tokens);
+        //printTokens(tokens);
         KotlinParser parser = new KotlinParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(new ParserErrorListener());
         parser.setErrorHandler(new ParserErrorStrategy());
         // print syntax tree
-        printSyntaxTree(parser.kotlinFile());
+        //printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
     }
 
