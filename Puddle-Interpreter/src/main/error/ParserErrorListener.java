@@ -1,6 +1,7 @@
 package main.error;
 
 import main.antlr.kotlin.KotlinLexer;
+import main.antlr.kotlin.KotlinParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -12,12 +13,30 @@ import java.util.List;
 
 public class ParserErrorListener extends BaseErrorListener {
 
+    private String message = null;
+
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
-        Collections.reverse(stack);
-        ConsoleLogger.err("rule stack: "+stack+"\n");
-        ConsoleLogger.err("[SyntaxError][Line "+line+":"+charPositionInLine+"]["+offendingSymbol+"]["+msg+"]\n");
+        if(!stack.isEmpty()){
+            switch (stack.get(0)){
+                case "functionValueParameters":
+                    ConsoleLogger.err(
+                            "[SyntaxError]" +
+                            "[Line "+line+":"+charPositionInLine+"]" +
+                            "["+((Token) offendingSymbol).getText()+"]" +
+                            "[ Missing close parenthesis. ]\n");
+                    break;
+                    default:
+                        Collections.reverse(stack);
+                        ConsoleLogger.err("Rule Stack: "+stack+"\n");
+                        ConsoleLogger.err(
+                                "[SyntaxError]" +
+                                        "[Line "+line+":"+charPositionInLine+"]" +
+                                        "["+((Token) offendingSymbol).getText()+"]" +
+                                        "["+msg+"]\n");
+            }
+        }
     }
 
     @Override
