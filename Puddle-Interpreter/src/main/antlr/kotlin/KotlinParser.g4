@@ -217,7 +217,8 @@ type
     ( parenthesizedType
     | nullableType
     | typeReference
-    | functionType)
+    | functionType
+    | ReservedKeywords)
     ;
 
 typeModifierList

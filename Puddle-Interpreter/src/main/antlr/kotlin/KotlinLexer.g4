@@ -283,6 +283,16 @@ NullLiteral
     : 'null'
     ;
 
+ReservedKeywords
+    : 'Int'
+    | 'Float'
+    | 'Double'
+    | 'Long'
+    | 'Short'
+    | 'Char'
+    | 'String'
+    ;
+
 Identifier
     : (Letter | '_') (Letter | '_' | DecDigit)*
     | '`' ~('`')+ '`'

@@ -14,22 +14,27 @@ import java.io.IOException;
 * java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinLexer.g4"
 * java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinParser.g4"
 * */
+// Lexer added reserved keywords
+// parser added reserved keywords rule to "type" rule
 public class Driver {
     public static void main(String[] args){
         //new MainWindow("Puddle IDE",1280,720);
         String text =
-                "fun main(args : Array<String>) {\n" +
-                        "    val x: Int = 0;\n" +
-                        "\tval _veryWeirdIdentifier567: Float = 999.9;\n" +
-                        "\tval y = (5 > 4 && true) || (false && !(x==0));\n" +
-                        "\tval myArray: Array<Integer> = Array(10);\n" +
+                "fun myFunction(x: Int): Int {\n" +
+                        "\tval add: Int =  x + 50 + 1; //syntax error #1\n" +
                         "\t\n" +
-                        "\tscan(\"What is the input: \" ,x)\n" +
-                        "\tprint(\"Input: \" ,x)\n" +
+                        "\treturn add; //syntax error #2\n" +
+                        "}\n" +
+                        "\n" +
+                        "fun myFunctionFloat(x: Float): Float {\n" +
+                        "\tval fTest: Float = ((x * 50) + (x * 15)); //syntax error #3\n" +
                         "\t\n" +
-                        "\tfor(i in 1..5) {\n" +
-                        "\t\tprint(\"Hello world\");\n" +
-                        "\t}\n" +
+                        "\treturn fTest * 50 (); //syntax error #4\n" +
+                        "}\n" +
+                        "\n" +
+                        "fun main(args : Array<String>) {\n" +
+                        "\tthis.myFunction(50);\n" +
+                        "\tthis.myFunctionFloat(50.0f);\n" +
                         "}";
         KotlinParserFacade parser = new KotlinParserFacade();
         try {
