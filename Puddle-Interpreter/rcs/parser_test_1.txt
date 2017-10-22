@@ -1,0 +1,15 @@
+//Convert this into your language rule syntax.
+
+fun main(args : Array<String>) {
+    val x: Int = 0
+	val _veryWeirdIdentifier567: Float = 999.9
+	val y = (5 > 4 && true) || (false && !(x==0))
+	val myArray: Array<Integer> = Array(10)
+	
+	scan("What is the input: " ,x)
+	print("Input: " ,x)
+	
+	for(i in 1..5) {
+		print("Hello world");
+	}
+}

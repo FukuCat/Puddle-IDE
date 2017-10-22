@@ -45,7 +45,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[" + msg + "]\n");
                 }
             }
-            hasError = true;
+            //hasError = true;
         }
     }
 

@@ -1,0 +1,18 @@
+//Convert this into your language rule syntax.
+
+fun myFunction(x: Int): Int {
+	val add: Int =  x + 50 ++ 1; //syntax error #1
+	
+	return Int; //syntax error #2
+}
+
+fun myFunctionFloat(x: Float): Float {
+	val fTest: Float = (x * 50) + (x * 15)); //syntax error #3
+	
+	return fTest * 50 (); //syntax error #4
+}
+
+fun main(args : Array<String>) {
+	this.myFunction(50);
+	this.myFunctionFloat(50.0f);
+}
