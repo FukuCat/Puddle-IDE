@@ -748,6 +748,16 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitDotQualifiedExpression(KotlinParser.DotQualifiedExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link KotlinParser#assignableExpressionNoNumber}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignableExpressionNoNumber(KotlinParser.AssignableExpressionNoNumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#assignableExpressionNoNumber}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignableExpressionNoNumber(KotlinParser.AssignableExpressionNoNumberContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link KotlinParser#assignableExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -847,6 +857,16 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValueArgument(KotlinParser.ValueArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#primaryExpressionNoNumber}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryExpressionNoNumber(KotlinParser.PrimaryExpressionNoNumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#primaryExpressionNoNumber}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryExpressionNoNumber(KotlinParser.PrimaryExpressionNoNumberContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KotlinParser#primaryExpression}.
 	 * @param ctx the parse tree

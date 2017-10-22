@@ -904,6 +904,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssignableExpressionNoNumber(KotlinParser.AssignableExpressionNoNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignableExpressionNoNumber(KotlinParser.AssignableExpressionNoNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignableExpression(KotlinParser.AssignableExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1019,6 +1031,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValueArgument(KotlinParser.ValueArgumentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrimaryExpressionNoNumber(KotlinParser.PrimaryExpressionNoNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrimaryExpressionNoNumber(KotlinParser.PrimaryExpressionNoNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

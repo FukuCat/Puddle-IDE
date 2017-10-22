@@ -24,7 +24,7 @@ public class KotlinParserFacade {
         parser.addErrorListener(new ParserErrorListener());
         parser.setErrorHandler(new ParserErrorStrategy());
         // print syntax tree
-        //printSyntaxTree(parser.kotlinFile());
+        printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
     }
 
@@ -65,7 +65,7 @@ public class KotlinParserFacade {
                 if(element.getChildCount() > 1)
                     isTerminal = element.getChild(i).getChildCount() == 0;
             }
-            isImportant = element.getChildCount() > 1 || isTerminal;
+            isImportant = element.getChildCount() > 1 || isTerminal || true;
             if (element instanceof RuleContext) {
                 exploreSyntaxTree((RuleContext)element,
                         isImportant? indentation + 1: indentation,
