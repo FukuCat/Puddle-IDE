@@ -1,5 +1,7 @@
 package model;
 
+import view.jTextEditor.JTextEditor;
+
 import javax.swing.*;
 
 public class SharedData {
@@ -12,8 +14,8 @@ public class SharedData {
     private JTextArea consoleTextArea;
 
     private SharedData(){
-        editorTextArea = new JTextArea();
-        consoleTextArea = new JTextArea();
+        editorTextArea = new JTextEditor();
+        consoleTextArea = new JTextEditor();
     }
 
     public JTextArea getEditorTextArea() {

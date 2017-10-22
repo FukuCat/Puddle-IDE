@@ -17,37 +17,38 @@ public class ParserErrorListener extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        if(!hasError) {
+        if(!hasError && offendingSymbol instanceof Token) {
+            Token t = (Token) offendingSymbol;
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
             if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
-                                        "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
+                                        "[Symbol \'" + t.getText() + "\']" +
                                         "[ Missing close parenthesis. ]\n");
                         break;
                     case "block":
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
-                                        "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
+                                        "[Symbol \'" + t.getText() + "\']" +
                                         "[ Check if statements are formatted properly / function block is closed. ]\n");
                         break;
                     case "kotlinFile":
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
-                                        "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
+                                        "[Symbol \'" + t.getText() + "\']" +
                                         "[ Unexpected symbol found at top-level. ]\n");
                     default:
                         Collections.reverse(stack);
                         ConsoleLogger.err("Rule Stack: " + stack + "\n");
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
-                                        "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
+                                        "[Symbol \'" + t.getText() + "\']" +
                                         "[" + msg + "]\n");
                 }
             }
@@ -65,12 +66,15 @@ public class ParserErrorListener extends BaseErrorListener {
 
     @Override
     public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
+        //System.out.println("A");
     }
     @Override
     public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex, BitSet conflictingAlts, ATNConfigSet configs) {
+        //System.out.println("AFC");
     }
     @Override
     public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction, ATNConfigSet configs) {
+        //System.out.println("CS");
     }
 
 }
