@@ -25,27 +25,41 @@ public class ParserErrorListener extends BaseErrorListener {
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
                                         "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[" + ((Token) offendingSymbol).getText() + "]" +
+                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
                                         "[ Missing close parenthesis. ]\n");
                         break;
                     case "block":
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
                                         "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[" + ((Token) offendingSymbol).getText() + "]" +
-                                        "[ Check if functions are called properly / function block is closed ]\n");
+                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[ Check if statements are formatted properly / function block is closed. ]\n");
                         break;
+                    case "kotlinFile":
+                        ConsoleLogger.err(
+                                "[SyntaxError]" +
+                                        "[Line " + line + ":" + charPositionInLine + "]" +
+                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
+                                        "[ Unexpected symbol found at top-level. ]\n");
                     default:
                         Collections.reverse(stack);
                         ConsoleLogger.err("Rule Stack: " + stack + "\n");
                         ConsoleLogger.err(
                                 "[SyntaxError]" +
                                         "[Line " + line + ":" + charPositionInLine + "]" +
-                                        "[" + ((Token) offendingSymbol).getText() + "]" +
+                                        "[Symbol \'" + ((Token) offendingSymbol).getText() + "\']" +
                                         "[" + msg + "]\n");
                 }
             }
             hasError = true;
+            /*
+            Vocabulary vocab = KotlinLexer.VOCABULARY;
+            ConsoleLogger.err(e.getExpectedTokens().toString(KotlinParser.VOCABULARY)+"\n");
+            ConsoleLogger.err(e.getCtx().getText()+"\n");
+            ConsoleLogger.err(e.getCtx().getParent().getText()+"\n");
+            ConsoleLogger.err(vocab.getSymbolicName(e.getOffendingToken().getTokenIndex())+"\n");
+            ConsoleLogger.err(vocab.getSymbolicName(e.getOffendingToken().getType())+"\n");
+            */
         }
     }
 

@@ -12,15 +12,15 @@ public class AntlrKotlinListener extends KotlinParserBaseListener {
     @Override
     public void enterKotlinFile(KotlinParser.KotlinFileContext ctx) {
 
-        System.out.println("Program Start");
-        print(ctx);
+        //System.out.println("Program Start");
+        //print(ctx);
 
     }
 
     @Override
     public void exitKotlinFile(KotlinParser.KotlinFileContext ctx) {
 
-        System.out.println("Program End");
+        //System.out.println("Program End");
 
     }
 
