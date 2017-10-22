@@ -9,7 +9,9 @@ import view.window.MainWindow;
 import java.io.IOException;
 
 /*
-* cd "C:\Users\fukon\Desktop\New folder\"
+* Setup instructions:
+* Run in powershell
+* cd "C:\Users\fukon\Desktop\New folder\" <-- path to jar and g4 files in same dir
 * java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "UnicodeClasses.g4"
 * java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinLexer.g4"
 * java -cp "antlr-4.7-complete.jar" org.antlr.v4.Tool "KotlinParser.g4"
