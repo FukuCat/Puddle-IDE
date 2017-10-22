@@ -33,7 +33,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                 "[SyntaxError]" +
                                         "[Line " + line + ":" + charPositionInLine + "]" +
                                         "[" + ((Token) offendingSymbol).getText() + "]" +
-                                        "[ Check if functions are called properly. ]\n");
+                                        "[ Check if functions are called properly / function block is closed ]\n");
                         break;
                     default:
                         Collections.reverse(stack);
@@ -45,7 +45,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[" + msg + "]\n");
                 }
             }
-            //hasError = true;
+            hasError = true;
         }
     }
 
