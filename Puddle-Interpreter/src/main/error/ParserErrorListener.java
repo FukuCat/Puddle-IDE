@@ -19,6 +19,7 @@ public class ParserErrorListener extends BaseErrorListener {
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         if(!hasError) {
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
+            Collections.reverse(stack);
             if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
