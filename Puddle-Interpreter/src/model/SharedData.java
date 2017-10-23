@@ -3,8 +3,14 @@ package model;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import view.MessageConsole;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import java.awt.*;
 
 public class SharedData {
 
@@ -13,14 +19,19 @@ public class SharedData {
     public static synchronized SharedData getInstance(){return instance == null? (instance = new SharedData()) : instance; }
 
     private RSyntaxTextArea editorTextArea;
-    private JTextArea consoleTextArea;
+    private JTextPane consoleTextArea;
+    private MessageConsole console;
 
     private SharedData(){
         editorTextArea = new RSyntaxTextArea();
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         atmf.putMapping("text/puddle", "view.rSyntaxTextArea.KotlinTokenMaker");
         editorTextArea.setSyntaxEditingStyle("text/puddle");
-        consoleTextArea = new JTextArea();
+        consoleTextArea = new JTextPane();
+        console = new MessageConsole(consoleTextArea);
+        console.setMessageLines(100);
+        console.redirectOut(Color.WHITE, System.out);
+        console.redirectErr(Color.RED, System.err);
     }
 
     public void highlightEditorLine(int line){
@@ -45,15 +56,11 @@ public class SharedData {
         return editorTextArea.getText();
     }
 
-    public void appendConsoleText(String text){
-        consoleTextArea.append(text);
-    }
-
-    public JTextArea getConsoleTextArea() {
+    public JTextPane getConsoleTextArea() {
         return consoleTextArea;
     }
 
-    public void setConsoleTextArea(JTextArea consoleTextArea) {
+    public void setConsoleTextArea(JTextPane consoleTextArea) {
         this.consoleTextArea = consoleTextArea;
     }
 }

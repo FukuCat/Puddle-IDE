@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ConsolePanel extends JPanel {
-    JTextArea txt_textArea;
+    JTextPane txt_textArea;
     JScrollPane scl_scroll;
     public ConsolePanel(int w, int h) {
         super();
         txt_textArea = SharedData.getInstance().getConsoleTextArea();
         txt_textArea.setEditable(false);
-        txt_textArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
+        //txt_textArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         txt_textArea.setForeground(Color.WHITE);
         txt_textArea.setBackground(Color.BLACK);
         txt_textArea.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
