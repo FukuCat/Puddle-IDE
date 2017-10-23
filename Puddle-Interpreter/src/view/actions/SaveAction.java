@@ -23,6 +23,8 @@ public class SaveAction implements ActionListener {
         String filename = "", dir = "", code;
 
         JFileChooser c = new JFileChooser();
+        c.setCurrentDirectory(new File
+                (System.getProperty("user.home") + System.getProperty("file.separator")+ "Desktop"));
         // Demonstrate "Save" dialog:
         int rVal = c.showSaveDialog(parent);
         if (rVal == JFileChooser.APPROVE_OPTION) {
