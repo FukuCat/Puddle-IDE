@@ -3,7 +3,6 @@ package view.window;
 import main.antlr.kotlin.KotlinLexer;
 import model.SharedData;
 import org.antlr.v4.runtime.Vocabulary;
-import view.jTextEditor.JTextEditor;
 import view.panel.ConsolePanel;
 import view.panel.TextEditorPanel;
 import view.panel.ToolBarPanel;
@@ -35,10 +34,12 @@ public class MainWindow extends JFrame{
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) (dimension.getWidth() / 2) - w/2;
         int y = (int) (dimension.getHeight() / 2) - h/2;
+
         this.setLocation(x, y);
 
         this.add(container);
         this.pack();
         this.setVisible(true);
     }
+
 }
