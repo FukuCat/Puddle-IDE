@@ -24,6 +24,7 @@ public class ParserErrorListener extends BaseErrorListener {
             Collections.reverse(stack);
             //ConsoleLogger.err("rule stack: "+stack+"\n");
             ConsoleLogger.err("line "+line+":"+charPositionInLine+" before "+offendingSymbol+": "+msg+"\n");
+            SharedData.getInstance().highlightEditorLine(t.getLine());
             /*if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
