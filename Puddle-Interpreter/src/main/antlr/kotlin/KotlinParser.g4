@@ -65,6 +65,7 @@ primaryConstructor
 classParameters
     : LPAREN (classParameter (COMMA classParameter)*)? RPAREN
     | LPAREN (classParameter (COMMA classParameter)*)? RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN (classParameter ( COMMA classParameter)*)? {notifyErrorListeners("Missing closing ')'");}
     ;
 
 classParameter
@@ -144,6 +145,7 @@ functionDeclaration
 functionValueParameters
     : LPAREN (functionValueParameter (COMMA functionValueParameter)*)? RPAREN
     | LPAREN (functionValueParameter (COMMA functionValueParameter)*)? RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN (functionValueParameter (COMMA functionValueParameter)*)? {notifyErrorListeners("Missing closing ')'");}
     ;
 
 functionValueParameter
@@ -187,6 +189,7 @@ propertyDeclaration
 multiVariableDeclaration
     : LPAREN variableDeclaration (COMMA variableDeclaration)* RPAREN
     | LPAREN variableDeclaration (COMMA variableDeclaration)* RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN variableDeclaration (COMMA variableDeclaration)* {notifyErrorListeners("Missing closing ')'");}
     ;
 
 variableDeclaration
@@ -196,13 +199,15 @@ variableDeclaration
 getter
     : modifierList? GETTER
     | modifierList? GETTER NL* LPAREN RPAREN (NL* COLON NL* type)? NL* (block | ASSIGNMENT NL* expression)
-    | modifierList? GETTER NL* LPAREN RPAREN RPAREN (NL* COLON NL* type)? NL* (block | ASSIGNMENT NL* expression)
+    | modifierList? GETTER NL* LPAREN RPAREN RPAREN (NL* COLON NL* type)? NL* (block | ASSIGNMENT NL* expression) {notifyErrorListeners("Too many parentheses");}
+    | modifierList? GETTER NL* LPAREN (NL* COLON NL* type)? NL* (block | ASSIGNMENT NL* expression) {notifyErrorListeners("Missing closing ')'");}
     ;
 
 setter
     : modifierList? SETTER
     | modifierList? SETTER NL* LPAREN (annotations | parameterModifier)* (simpleIdentifier | parameter) RPAREN NL* functionBody
     | modifierList? SETTER NL* LPAREN (annotations | parameterModifier) * (simpleIdentifier | parameter) RPAREN RPAREN NL* functionBody {notifyErrorListeners("Too many parentheses");}
+    | modifierList? SETTER NL* LPAREN (annotations | parameterModifier) * (simpleIdentifier | parameter) NL* functionBody {notifyErrorListeners("Missing closing ')'");}
     ;
 
 typeAlias
@@ -233,6 +238,7 @@ typeModifierList
 parenthesizedType
     : LPAREN type RPAREN
     | LPAREN type RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN type {notifyErrorListeners("Missing closing ')'");}
     ;
 
 nullableType
@@ -242,6 +248,7 @@ nullableType
 typeReference
     : LPAREN typeReference RPAREN
     | LPAREN typeReference RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN typeReference {notifyErrorListeners("Missing closing ')'");}
     | userType
     | DYNAMIC
     ;
@@ -268,6 +275,7 @@ simpleUserType
 functionTypeParameters
     : LPAREN (parameter | type)? (COMMA (parameter | type))* RPAREN
     | LPAREN (parameter | type)? (COMMA (parameter | type))* RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN (parameter | type)? (COMMA (parameter | type))* {notifyErrorListeners("Missing closing ')'");}
     ;
 
 typeConstraints
@@ -409,8 +417,10 @@ arrayAccess
 valueArguments
     : LPAREN valueArgument? RPAREN
     | LPAREN valueArgument? RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN valueArgument? {notifyErrorListeners("Missing closing ')'");}
     | LPAREN valueArgument (COMMA valueArgument)* RPAREN
     | LPAREN valueArgument (COMMA valueArgument)* RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN valueArgument (COMMA valueArgument)* {notifyErrorListeners("Missing closing ')'");}
     ;
 
 typeArguments
@@ -448,6 +458,7 @@ primaryExpression
 parenthesizedExpression
     : LPAREN expression RPAREN
     | LPAREN expression RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN expression {notifyErrorListeners("Missing closing ')'");}
     ;
 
 literalConstant
@@ -533,6 +544,7 @@ conditionalExpression
 ifExpression
     : IF NL* LPAREN expression RPAREN NL* controlStructureBody? SEMICOLON?
     | IF NL* LPAREN expression RPAREN RPAREN NL* controlStructureBody? SEMICOLON? {notifyErrorListeners("Too many parentheses");}
+    | IF NL* LPAREN expression NL* controlStructureBody? SEMICOLON? {notifyErrorListeners("Missing closing ')'");}
     (NL* ELSE NL* controlStructureBody?)?
     ;
 
@@ -571,6 +583,7 @@ tryExpression
 catchBlock
     : CATCH NL* LPAREN annotations* simpleIdentifier COLON userType RPAREN NL* block
     | CATCH NL* LPAREN annotations* simpleIdentifier COLON userType RPAREN RPAREN NL* block {notifyErrorListeners("Too many parentheses");}
+    | CATCH NL* LPAREN annotations* simpleIdentifier COLON userType NL* block {notifyErrorListeners("Missing closing ')'");}
     ;
 
 finallyBlock
@@ -586,16 +599,19 @@ loopExpression
 forExpression
     : FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
     | FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN RPAREN NL* controlStructureBody? {notifyErrorListeners("Too many parentheses");}
+    | FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression NL* controlStructureBody? {notifyErrorListeners("Missing closing ')'");}
     ;
 
 whileExpression
     : WHILE NL* LPAREN expression RPAREN NL* controlStructureBody?
     | WHILE NL* LPAREN expression RPAREN RPAREN NL* controlStructureBody? {notifyErrorListeners("Too many parentheses");}
+    | WHILE NL* LPAREN expression NL* controlStructureBody? {notifyErrorListeners("Missing closing ')'");}
     ;
 
 doWhileExpression
     : DO NL* controlStructureBody? NL* WHILE NL* LPAREN expression RPAREN
     | DO NL* controlStructureBody? NL* WHILE NL* LPAREN expression RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | DO NL* controlStructureBody? NL* WHILE NL* LPAREN expression {notifyErrorListeners("Missing closing ')'");}
     ;
 
 jumpExpression

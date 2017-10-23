@@ -20,8 +20,8 @@ public class ParserErrorListener extends BaseErrorListener {
         if(!hasError) {
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
             Collections.reverse(stack);
-            ConsoleLogger.err("rule stack: "+stack+"\n");
-            ConsoleLogger.err("line "+line+":"+charPositionInLine+" at "+offendingSymbol+": "+msg+"\n");
+            //ConsoleLogger.err("rule stack: "+stack+"\n");
+            ConsoleLogger.err("line "+line+":"+charPositionInLine+" before "+offendingSymbol+": "+msg+"\n");
             /*if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
