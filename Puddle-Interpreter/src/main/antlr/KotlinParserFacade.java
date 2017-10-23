@@ -10,12 +10,14 @@ import org.antlr.v4.runtime.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import main.error.LexerErrorStrategy;
+import org.antlr.v4.runtime.atn.PredictionMode;
 
 public class KotlinParserFacade {
 
     public KotlinParser.KotlinFileContext parseString(String text) throws IOException {
         // charset = "UTF-8"
-        KotlinLexer lexer = new KotlinLexer(CharStreams.fromString(text));
+        LexerErrorStrategy lexer = new LexerErrorStrategy(CharStreams.fromString(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // print tokens
         //printTokens(tokens);
@@ -23,6 +25,7 @@ public class KotlinParserFacade {
         parser.removeErrorListeners();
         parser.addErrorListener(new ParserErrorListener());
         parser.setErrorHandler(new ParserErrorStrategy());
+        parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         // print syntax tree
         //printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
@@ -30,7 +33,7 @@ public class KotlinParserFacade {
 
     public KotlinParser.KotlinFileContext parseFile(String path, String charset) throws IOException {
         // charset = "UTF-8"
-        KotlinLexer lexer = new KotlinLexer(CharStreams.fromFileName(path, Charset.forName(charset)));
+        LexerErrorStrategy lexer = new LexerErrorStrategy(CharStreams.fromFileName(path, Charset.forName(charset)));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // print tokens
         //printTokens(tokens);
@@ -38,6 +41,7 @@ public class KotlinParserFacade {
         parser.removeErrorListeners();
         parser.addErrorListener(new ParserErrorListener());
         parser.setErrorHandler(new ParserErrorStrategy());
+        parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         // print syntax tree
         //printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
