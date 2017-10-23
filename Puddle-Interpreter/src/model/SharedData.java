@@ -3,13 +3,9 @@ package model;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import view.MessageConsole;
+import view.components.consoleWindow.MessageConsole;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
 
 public class SharedData {
@@ -25,7 +21,7 @@ public class SharedData {
     private SharedData(){
         editorTextArea = new RSyntaxTextArea();
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
-        atmf.putMapping("text/puddle", "view.rSyntaxTextArea.KotlinTokenMaker");
+        atmf.putMapping("text/puddle", "view.components.editorSyntax.KotlinTokenMaker");
         editorTextArea.setSyntaxEditingStyle("text/puddle");
         consoleTextArea = new JTextPane();
         console = new MessageConsole(consoleTextArea);
