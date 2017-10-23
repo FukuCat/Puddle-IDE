@@ -15,7 +15,6 @@ public class TextEditorPanel extends JPanel {
         txt_textArea = SharedData.getInstance().getEditorTextArea();
         //txt_textArea.setSyntaxEditingStyle(SyntaxConstants.);
         //txt_textArea.setCodeFoldingEnabled(true);
-
         txt_textArea.setEditable(true);
         txt_textArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         scl_scroll = new RTextScrollPane(txt_textArea);

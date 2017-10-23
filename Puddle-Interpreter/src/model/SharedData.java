@@ -23,6 +23,10 @@ public class SharedData {
         consoleTextArea = new JTextArea();
     }
 
+    public void highlightEditorLine(int line){
+        editorTextArea.setCaretPosition(line);
+    }
+
     public RSyntaxTextArea getEditorTextArea() {
         return editorTextArea;
     }
