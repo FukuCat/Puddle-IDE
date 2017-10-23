@@ -2,6 +2,7 @@ package main.error;
 
 import main.antlr.kotlin.KotlinLexer;
 import main.antlr.kotlin.KotlinParser;
+import model.SharedData;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -28,6 +29,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
                                         "[Symbol \'" + t.getText() + "\']" +
                                         "[ Missing close parenthesis. ]\n");
+                        SharedData.getInstance().highlightEditorLine(t.getLine());
                         break;
                     case "block":
                         ConsoleLogger.err(
@@ -35,6 +37,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
                                         "[Symbol \'" + t.getText() + "\']" +
                                         "[ Check if statements are formatted properly / function block is closed. ]\n");
+                        SharedData.getInstance().highlightEditorLine(t.getLine());
                         break;
                     case "kotlinFile":
                         ConsoleLogger.err(
@@ -42,6 +45,8 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
                                         "[Symbol \'" + t.getText() + "\']" +
                                         "[ Unexpected symbol found at top-level. ]\n");
+                        SharedData.getInstance().highlightEditorLine(t.getLine());
+                        break;
                     default:
                         Collections.reverse(stack);
                         ConsoleLogger.err("Rule Stack: " + stack + "\n");
@@ -50,6 +55,7 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
                                         "[Symbol \'" + t.getText() + "\']" +
                                         "[" + msg + "]\n");
+                        SharedData.getInstance().highlightEditorLine(t.getLine());
                 }
             }
             hasError = true;
