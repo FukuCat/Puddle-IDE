@@ -20,7 +20,10 @@ public class ParserErrorListener extends BaseErrorListener {
         if(!hasError && offendingSymbol instanceof Token) {
             Token t = (Token) offendingSymbol;
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
-            if (!stack.isEmpty()) {
+            Collections.reverse(stack);
+            //ConsoleLogger.err("rule stack: "+stack+"\n");
+            ConsoleLogger.err("line "+line+":"+charPositionInLine+" before "+offendingSymbol+": "+msg+"\n");
+            /*if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
                         ConsoleLogger.err(
@@ -51,8 +54,8 @@ public class ParserErrorListener extends BaseErrorListener {
                                         "[Symbol \'" + t.getText() + "\']" +
                                         "[" + msg + "]\n");
                 }
-            }
-            hasError = true;
+            }*/
+            //hasError = true;
             /*
             Vocabulary vocab = KotlinLexer.VOCABULARY;
             ConsoleLogger.err(e.getExpectedTokens().toString(KotlinParser.VOCABULARY)+"\n");
