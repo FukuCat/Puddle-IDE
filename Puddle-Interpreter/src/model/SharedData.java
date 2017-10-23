@@ -1,5 +1,9 @@
 package model;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+
 import javax.swing.*;
 
 public class SharedData {
@@ -8,19 +12,26 @@ public class SharedData {
 
     public static synchronized SharedData getInstance(){return instance == null? (instance = new SharedData()) : instance; }
 
-    private JTextArea editorTextArea;
+    private RSyntaxTextArea editorTextArea;
     private JTextArea consoleTextArea;
 
     private SharedData(){
-        editorTextArea = new JTextArea();
+        editorTextArea = new RSyntaxTextArea();
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
+        atmf.putMapping("text/puddle", "view.rSyntaxTextArea.KotlinTokenMaker");
+        editorTextArea.setSyntaxEditingStyle("text/puddle");
         consoleTextArea = new JTextArea();
     }
 
-    public JTextArea getEditorTextArea() {
+    public void highlightEditorLine(int line){
+        editorTextArea.setCaretPosition(line);
+    }
+
+    public RSyntaxTextArea getEditorTextArea() {
         return editorTextArea;
     }
 
-    public void setEditorTextArea(JTextArea editorTextArea) {
+    public void setEditorTextArea(RSyntaxTextArea editorTextArea) {
         this.editorTextArea = editorTextArea;
     }
 

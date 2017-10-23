@@ -1,11 +1,15 @@
 package view.window;
 
+import main.antlr.kotlin.KotlinLexer;
+import model.SharedData;
+import org.antlr.v4.runtime.Vocabulary;
 import view.panel.ConsolePanel;
 import view.panel.TextEditorPanel;
 import view.panel.ToolBarPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MainWindow extends JFrame{
 
@@ -26,15 +30,16 @@ public class MainWindow extends JFrame{
         container.add(new ToolBarPanel(w,TOOLBAR_HEIGHT));
         container.add(new TextEditorPanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .70)));
         container.add(new ConsolePanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .30)));
-
         // center
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) (dimension.getWidth() / 2) - w/2;
         int y = (int) (dimension.getHeight() / 2) - h/2;
+
         this.setLocation(x, y);
 
         this.add(container);
         this.pack();
         this.setVisible(true);
     }
+
 }
