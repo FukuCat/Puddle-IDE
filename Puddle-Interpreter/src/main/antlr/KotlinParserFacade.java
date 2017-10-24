@@ -27,7 +27,7 @@ public class KotlinParserFacade {
         parser.setErrorHandler(new ParserErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         // print syntax tree
-        printSyntaxTree(parser.kotlinFile());
+        //printSyntaxTree(parser.kotlinFile());
         return parser.kotlinFile();
     }
 
