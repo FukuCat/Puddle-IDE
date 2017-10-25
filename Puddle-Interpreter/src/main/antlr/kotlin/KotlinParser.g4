@@ -121,7 +121,7 @@ constructorDelegationCall
 
 enumClassBody
     : LCURL NL* enumEntries? (NL* SEMICOLON NL* classMemberDeclaration*)? NL* RCURL
-    | LCURL NL* enumEntries? (NL* SEMICOLON NL* classMemberDeclaration*)? NL* RCURL {notifyErrorListeners("Missing closing '}'");}
+    | LCURL NL* enumEntries? (NL* SEMICOLON NL* classMemberDeclaration*)? NL* {notifyErrorListeners("Missing closing '}'");}
     ;
 
 enumEntries
@@ -161,6 +161,7 @@ parameter
 functionBody
     : block
     | ASSIGNMENT NL* expression
+    | ASSIGNMENT NL* expression ASSIGNMENT {notifyErrorListeners("additional assignment found");}
     ;
 
 objectDeclaration
@@ -275,7 +276,7 @@ simpleUserType
 
 //parameters for functionType
 functionTypeParameters
-    : LPAREN (parameter | type)? (COMMA (parameter | type))* RPAREN
+    : LPAREN (parameter | type)? (COMMA (parameter | type))* RPAREN {notifyErrorListeners("FUNCTIONTYPEPARAMETER");}
     | LPAREN (parameter | type)? (COMMA (parameter | type))* RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
     | LPAREN (parameter | type)? (COMMA (parameter | type))* {notifyErrorListeners("Missing closing ')'");}
     ;
@@ -313,6 +314,7 @@ declaration
 
 assignment
     : assignableExpression assignmentOperator NL* disjunction
+    | assignableExpression assignmentOperator NL* disjunction ADD {notifyErrorListeners("Additional '+' found");}
     ;
 
 expression
@@ -346,6 +348,7 @@ elvisExpression
 
 infixFunctionCall
     : rangeExpression (simpleIdentifier NL* rangeExpression)*
+    | lineStringLiteral
     ;
 
 rangeExpression
@@ -483,6 +486,8 @@ stringLiteral
 
 lineStringLiteral
     : QUOTE_OPEN (lineStringContent | lineStringExpression)* QUOTE_CLOSE
+    | lineStringContent {notifyErrorListeners("No quotation marks found");}
+    | lineStringExpression {notifyErrorListeners("No quotation marks found");}
     ;
 
 multiLineStringLiteral
@@ -549,6 +554,7 @@ conditionalExpression
 
 ifExpression
     : IF NL* LPAREN expression RPAREN NL* controlStructureBody? SEMICOLON?
+    | IF NL* LPAREN Identifier ASSIGNMENT IntegerLiteral RPAREN NL* controlStructureBody? SEMICOLON? {notifyErrorListeners("Missing Assignment");}
     | IF NL* LPAREN expression RPAREN RPAREN NL* controlStructureBody? SEMICOLON? {notifyErrorListeners("Too many parentheses");}
     | IF NL* LPAREN expression NL* controlStructureBody? SEMICOLON? {notifyErrorListeners("Missing closing ')'");}
     (NL* ELSE NL* controlStructureBody?)?
@@ -603,7 +609,8 @@ loopExpression
     ;
 
 forExpression
-    : FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
+    : FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN RANGE IntegerLiteral RPAREN NL* controlStructureBody? {notifyErrorListeners("Missing assignment");}
+    | FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
     | FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN RPAREN NL* controlStructureBody? {notifyErrorListeners("Too many parentheses");}
     | FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression NL* controlStructureBody? {notifyErrorListeners("Missing closing ')'");}
     ;

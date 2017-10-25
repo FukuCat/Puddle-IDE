@@ -1,4 +1,4 @@
-// Generated from KotlinLexer.g4 by ANTLR 4.7
+// Generated from KotlinLexer.g4 by ANTLR 4.5.3
 package main.antlr.kotlin;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -47,12 +47,10 @@ public class KotlinLexer extends Lexer {
 		MultiLineStringQuote=162, MultiLineStrRef=163, MultiLineStrText=164, MultiLineStrEscapedChar=165, 
 		MultiLineStrExprStart=166, MultiLineNL=167, StrExpr_IN=168, StrExpr_Comment=169, 
 		StrExpr_WS=170, StrExpr_NL=171;
-	public static final int
-		Inside=1, LineString=2, MultiLineString=3, StringExpression=4;
-	public static String[] channelNames = {
-		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
-	};
-
+	public static final int Inside = 1;
+	public static final int LineString = 2;
+	public static final int MultiLineString = 3;
+	public static final int StringExpression = 4;
 	public static String[] modeNames = {
 		"DEFAULT_MODE", "Inside", "LineString", "MultiLineString", "StringExpression"
 	};
@@ -232,9 +230,6 @@ public class KotlinLexer extends Lexer {
 	public String getSerializedATN() { return _serializedATN; }
 
 	@Override
-	public String[] getChannelNames() { return channelNames; }
-
-	@Override
 	public String[] getModeNames() { return modeNames; }
 
 	@Override
@@ -242,7 +237,7 @@ public class KotlinLexer extends Lexer {
 
 	private static final int _serializedATNSegments = 2;
 	private static final String _serializedATNSegment0 =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\u00ad\u0a54\b\1\b"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2\u00ad\u0a54\b\1\b"+
 		"\1\b\1\b\1\b\1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b"+
 		"\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t"+
 		"\20\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t"+
@@ -794,8 +789,8 @@ public class KotlinLexer extends Lexer {
 		"\u1a82\u1a8b\u1a92\u1a9b\u1b52\u1b5b\u1bb2\u1bbb\u1c42\u1c4b\u1c52\u1c5b"+
 		"\ua622\ua62b\ua8d2\ua8db\ua902\ua90b\ua9d2\ua9db\uaa52\uaa5b\uabf2\uabfb"+
 		"\uff12\uff1b\t\2\u16f0\u16f2\u2162\u2184\u2187\u218a\u3009\u3009\u3023"+
-		"\u302b\u303a\u303c\ua6e8\ua6f1\5\2$$&&^^\2\u0aab\2\7\3\2\2\2\2\t\3\2\2"+
-		"\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25"+
+		"\u302b\u303a\u303c\ua6e8\ua6f1\5\2$$&&^^\u0aab\2\7\3\2\2\2\2\t\3\2\2\2"+
+		"\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25"+
 		"\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2"+
 		"\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2"+
 		"\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3"+
@@ -1353,9 +1348,9 @@ public class KotlinLexer extends Lexer {
 		"\3\2\2\2\u07c2\u07c3\5c\60\2\u07c3\u07c4\3\2\2\2\u07c4\u07c5\b\u00cc\61"+
 		"\2\u07c5\u019c\3\2\2\2\u07c6\u07c7\5e\61\2\u07c7\u07c8\3\2\2\2\u07c8\u07c9"+
 		"\b\u00cd\62\2\u07c9\u019e\3\2\2\2\u07ca\u07cb\5\u00b9[\2\u07cb\u07cc\3"+
-		"\2\2\2\u07cc\u07cd\b\u00ce\63\2\u07cd\u01a0";
+		"\2\2\2\u07cc\u07cd\b\u00ce\63\2\u07cd\u01a0\3";
 	private static final String _serializedATNSegment1 =
-		"\3\2\2\2\u07ce\u07cf\5\u00bb\\\2\u07cf\u07d0\3\2\2\2\u07d0\u07d1\b\u00cf"+
+		"\2\2\2\u07ce\u07cf\5\u00bb\\\2\u07cf\u07d0\3\2\2\2\u07d0\u07d1\b\u00cf"+
 		"\64\2\u07d1\u01a2\3\2\2\2\u07d2\u07d3\5g\62\2\u07d3\u07d4\3\2\2\2\u07d4"+
 		"\u07d5\b\u00d0\65\2\u07d5\u01a4\3\2\2\2\u07d6\u07d7\5i\63\2\u07d7\u07d8"+
 		"\3\2\2\2\u07d8\u07d9\b\u00d1\66\2\u07d9\u01a6\3\2\2\2\u07da\u07db\5k\64"+

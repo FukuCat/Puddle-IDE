@@ -4,7 +4,7 @@ fun testOne() {
 	val x: Int =  0;
 	scan("Hello. I need your number: " ,x);
 	
-	for(i in ..10) { //syntax error #1
+	for(i in 10) { //syntax error #1
 		print("Petmalu " +x+); //syntax error #2
 		
 	//syntax error #3 (missing curly brace)

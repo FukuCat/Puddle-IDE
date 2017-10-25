@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.Token;
 
 public class ParserErrorStrategy extends DefaultErrorStrategy {
     
-    @Override
+    /*@Override
     public void recover(Parser recognizer, RecognitionException e) {
         throw new RuntimeException(e);
     }
@@ -32,7 +32,7 @@ public class ParserErrorStrategy extends DefaultErrorStrategy {
         // pointer to the parser that detected the error
         String msg = "can't choose between alternatives"; // nonstandard msg
         parser.notifyErrorListeners(e.getOffendingToken(), msg, e);
-    }
+    }*/
     
 
 }

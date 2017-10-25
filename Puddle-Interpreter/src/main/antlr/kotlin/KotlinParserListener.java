@@ -1,4 +1,5 @@
 // Generated from KotlinParser.g4 by ANTLR 4.5.3
+
 package main.antlr.kotlin;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
