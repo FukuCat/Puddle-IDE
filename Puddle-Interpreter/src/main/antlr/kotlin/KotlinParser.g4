@@ -92,6 +92,7 @@ explicitDelegation
 
 classBody
     : LCURL NL* classMemberDeclaration* NL* RCURL
+    | LCURL NL* classMemberDeclaration* NL* {notifyErrorListeners("Missing closing '}'");}
     ;
 
 classMemberDeclaration
@@ -120,6 +121,7 @@ constructorDelegationCall
 
 enumClassBody
     : LCURL NL* enumEntries? (NL* SEMICOLON NL* classMemberDeclaration*)? NL* RCURL
+    | LCURL NL* enumEntries? (NL* SEMICOLON NL* classMemberDeclaration*)? NL* RCURL {notifyErrorListeners("Missing closing '}'");}
     ;
 
 enumEntries
@@ -288,6 +290,7 @@ typeConstraint
 
 block
     : LCURL NL* (statement semi)* (statement semi?)? NL* RCURL
+    | LCURL NL* (statement semi)* (statement semi?)? NL* {notifyErrorListeners("Missing closing '}'");}
     ;
 
 statements
@@ -415,9 +418,10 @@ arrayAccess
     ;
 
 valueArguments
-    : LPAREN valueArgument? RPAREN
-    | LPAREN valueArgument? RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
-    | LPAREN valueArgument? {notifyErrorListeners("Missing closing ')'");}
+    : LPAREN valueArgument RPAREN
+    | LPAREN RPAREN {notifyErrorListeners("Redundant parentheses!");}
+    | LPAREN valueArgument RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
+    | LPAREN valueArgument {notifyErrorListeners("Missing closing ')'");}
     | LPAREN valueArgument (COMMA valueArgument)* RPAREN
     | LPAREN valueArgument (COMMA valueArgument)* RPAREN RPAREN {notifyErrorListeners("Too many parentheses");}
     | LPAREN valueArgument (COMMA valueArgument)* {notifyErrorListeners("Missing closing ')'");}
@@ -508,6 +512,8 @@ multiLineStringExpression
 functionLiteral
     : annotations*
     ( LCURL NL* statements NL* RCURL
+    | LCURL NL* statements NL* {notifyErrorListeners("Missing closing '}'");}
+    | LCURL NL* lambdaParameters NL* ARROW NL* statements NL* {notifyErrorListeners("Missing closing '}'");}
     | LCURL NL* lambdaParameters NL* ARROW NL* statements NL* RCURL )
     ;
 
@@ -617,6 +623,7 @@ doWhileExpression
 jumpExpression
     : THROW NL* expression
     | (RETURN | RETURN_AT) expression?
+    | RETURN ReservedKeywords {notifyErrorListeners("identifier expected, keyword found!");}
     | CONTINUE | CONTINUE_AT
     | BREAK | BREAK_AT
     ;
@@ -658,6 +665,7 @@ isOperator
 
 additiveOperator
     : ADD | SUB
+    | INCR {notifyErrorListeners("++ should be +");}
     ;
 
 multiplicativeOperator
