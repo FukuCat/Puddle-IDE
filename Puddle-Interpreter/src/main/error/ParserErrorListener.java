@@ -23,8 +23,13 @@ public class ParserErrorListener extends BaseErrorListener {
             List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
             Collections.reverse(stack);
             //ConsoleLogger.err("rule stack: "+stack+"\n");
-            ConsoleLogger.err("line "+line+":"+charPositionInLine+" before "+offendingSymbol+": "+msg+"\n");
-            SharedData.getInstance().highlightEditorLine(t.getLine());
+            ConsoleLogger.err(
+                    "[SyntaxError]" +
+                            "[Line " + t.getLine() + ":" + t.getCharPositionInLine() + "]" +
+                            "[Symbol \'" + t.getText() + "\']" +
+                            "[ "+msg+" ]\n");
+            //ConsoleLogger.err("line "+line+":"+charPositionInLine+" before "+offendingSymbol+": "+msg+"\n");
+            SharedData.getInstance().highlightEditorLine(line);
             /*if (!stack.isEmpty()) {
                 switch (stack.get(0)) {
                     case "functionValueParameters":
