@@ -302,6 +302,7 @@ statement
     : declaration
     | assignment
     | expression
+    | block
     ;
 
 declaration

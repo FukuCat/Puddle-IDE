@@ -17,10 +17,10 @@ public class TestAction implements ActionListener {
         //new AbstractSyntaxTreePrinter().print( new KotlinParserFacade().parseString(SharedData.getInstance().getEditorText()));
 
         parse();
-
     }
 
     public void parse(){
+        SharedData.getInstance().setErrorLine(null);
         KotlinParserFacade parser = new KotlinParserFacade();
         try {
             ParseTreeWalker.DEFAULT.walk(new AntlrKotlinListener(), parser.parseString(SharedData.getInstance().getEditorText()));

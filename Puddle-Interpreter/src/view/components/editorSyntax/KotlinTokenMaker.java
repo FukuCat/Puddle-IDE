@@ -16,9 +16,22 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
         tokenMap.put("for",   Token.RESERVED_WORD);
         tokenMap.put("if",    Token.RESERVED_WORD);
         tokenMap.put("while", Token.RESERVED_WORD);
+        tokenMap.put("fun", Token.RESERVED_WORD);
+        tokenMap.put("return", Token.RESERVED_WORD);
 
         tokenMap.put("print", Token.FUNCTION);
         tokenMap.put("scan",  Token.FUNCTION);
+        tokenMap.put("main",  Token.FUNCTION);
+
+        tokenMap.put("Integer", Token.DATA_TYPE);
+        tokenMap.put("Int", Token.DATA_TYPE);
+        tokenMap.put("Float", Token.DATA_TYPE);
+        tokenMap.put("Double", Token.DATA_TYPE);
+        tokenMap.put("Long", Token.DATA_TYPE);
+        tokenMap.put("String", Token.DATA_TYPE);
+        tokenMap.put("Char", Token.DATA_TYPE);
+        tokenMap.put("var", Token.DATA_TYPE);
+        tokenMap.put("val", Token.DATA_TYPE);
 
         return tokenMap;
     }
