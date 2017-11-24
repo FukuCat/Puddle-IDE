@@ -1,15 +1,18 @@
 package org.cmpiler.kotlin.interpreter.other;
 
 
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.cmpiler.kotlin.antlr.KotlinParser;
 
 public class ParserErrorStrategy extends DefaultErrorStrategy {
     
     @Override
     public void recover(Parser recognizer, RecognitionException e) {
+
         if ( lastErrorIndex==recognizer.getInputStream().index() &&
                 lastErrorStates != null &&
                 lastErrorStates.contains(recognizer.getState()) ) {

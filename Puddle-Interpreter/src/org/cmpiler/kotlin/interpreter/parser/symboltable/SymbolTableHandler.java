@@ -36,31 +36,109 @@ public class SymbolTableHandler extends SymbolTable{
 
     public static SymbolTableHandler getInstance(){return instance == null? (instance = new SymbolTableHandler()):instance;}
 
-    @Override
     public void initTypeSystem() {
+        PrimitiveType pVoid, pNull;
+        ClassSymbol pBoolean, pInt, pFloat, pDouble, pChar, pString, pLong;
+        ClassSymbol pBooleanArray, pIntArray, pFloatArray, pDoubleArray, pCharArray, pStringArray, pLongArray;
+        FunctionSymbol fPrint, fPrintln, fScanInt, fScanFloat, fScanChar, fScanString;
+        MethodSymbol fBooleanArray, fIntArray, fFloatArray, fDoubleArray, fCharArray, fStringArray, fLongArray;
 
-        definePredefinedSymbol(new PrimitiveType("Boolean"));
-        definePredefinedSymbol(new PrimitiveType("Int"));
-        definePredefinedSymbol(new PrimitiveType("Short"));
-        definePredefinedSymbol(new PrimitiveType("Float"));
-        definePredefinedSymbol(new PrimitiveType("Double"));
-        definePredefinedSymbol(new PrimitiveType("Char"));
-        definePredefinedSymbol(new PrimitiveType("String"));
-        definePredefinedSymbol(new PrimitiveType("Long"));
-        definePredefinedSymbol(new PrimitiveType("void"));
+        pVoid = new PrimitiveType("void");
+        pNull = new PrimitiveType("null");
 
-        definePredefinedSymbol(new ClassSymbol("BooleanArray"));
-        definePredefinedSymbol(new ClassSymbol("IntArray"));
-        definePredefinedSymbol(new ClassSymbol("ShortArray"));
-        definePredefinedSymbol(new ClassSymbol("FloatArray"));
-        definePredefinedSymbol(new ClassSymbol("DoubleArray"));
-        definePredefinedSymbol(new ClassSymbol("CharArray"));
-        definePredefinedSymbol(new ClassSymbol("StringArray"));
-        definePredefinedSymbol(new ClassSymbol("LongArray"));
+        definePredefinedSymbol(pVoid);
+        definePredefinedSymbol(pNull);
 
-        definePredefinedSymbol(new FunctionSymbol("print"));
-        definePredefinedSymbol(new FunctionSymbol("println"));
-        definePredefinedSymbol(new FunctionSymbol("scan"));
+        pBoolean = new ClassSymbol("Boolean");
+        pInt = new ClassSymbol("Int");
+        pFloat = new ClassSymbol("Float");
+        pDouble = new ClassSymbol("Double");
+        pChar = new ClassSymbol("Char");
+        pString = new ClassSymbol("String");
+        pLong = new ClassSymbol("Long");
+
+        pBooleanArray = new ClassSymbol("BooleanArray");
+        pIntArray = new ClassSymbol("IntArray");
+        pFloatArray = new ClassSymbol("FloatArray");
+        pDoubleArray = new ClassSymbol("DoubleArray");
+        pCharArray = new ClassSymbol("CharArray");
+        pStringArray = new ClassSymbol("StringArray");
+        pLongArray = new ClassSymbol("LongArray");
+
+        definePredefinedSymbol(pBoolean);
+        definePredefinedSymbol(pInt);
+        definePredefinedSymbol(pFloat);
+        definePredefinedSymbol(pDouble);
+        definePredefinedSymbol(pChar);
+        definePredefinedSymbol(pString);
+        definePredefinedSymbol(pLong);
+
+        definePredefinedSymbol(pBooleanArray);
+        definePredefinedSymbol(pIntArray);
+        definePredefinedSymbol(pFloatArray);
+        definePredefinedSymbol(pDoubleArray);
+        definePredefinedSymbol(pCharArray);
+        definePredefinedSymbol(pStringArray);
+        definePredefinedSymbol(pLongArray);
+        // functions
+        fPrint = new FunctionSymbol("print(String)");
+        fPrintln = new FunctionSymbol("println(String)");
+        fScanInt = new FunctionSymbol("scanInt()");
+        fScanFloat = new FunctionSymbol("scanFloat()");
+        fScanChar = new FunctionSymbol("scanChar()");
+        fScanString = new FunctionSymbol("scanString()");
+
+        // array constructors
+        fBooleanArray = new MethodSymbol("BooleanArray(Int)");
+        fIntArray = new MethodSymbol("IntArray(Int)");
+        fFloatArray = new MethodSymbol("FloatArray(Int)");
+        fDoubleArray = new MethodSymbol("DoubleArray(Int)");
+        fCharArray = new MethodSymbol("CharArray(Int)");
+        fStringArray = new MethodSymbol("StringArray(Int)");
+        fLongArray = new MethodSymbol("LongArray(Int)");
+
+        // return type
+        fPrint.setType(pVoid);
+        fPrintln.setType(pVoid);
+        fScanInt.setType(pInt);
+        fScanFloat.setType(pFloat);
+        fScanChar.setType(pChar);
+        fScanString.setType(pString);
+
+        fBooleanArray.setType(pBooleanArray);
+        fIntArray.setType(pIntArray);
+        fFloatArray.setType(pFloatArray);
+        fDoubleArray.setType(pDoubleArray);
+        fCharArray.setType(pCharArray);
+        fStringArray.setType(pStringArray);
+        fLongArray.setType(pLongArray);
+
+        // argument params
+        fPrint.define(pString);
+        fPrintln.define(pString);
+
+        fBooleanArray.define(pInt);
+        fIntArray.define(pInt);
+        fFloatArray.define(pInt);
+        fDoubleArray.define(pInt);
+        fCharArray.define(pInt);
+        fStringArray.define(pInt);
+        fLongArray.define(pInt);
+
+        definePredefinedSymbol(fPrint);
+        definePredefinedSymbol(fPrintln);
+        definePredefinedSymbol(fScanInt);
+        definePredefinedSymbol(fScanFloat);
+        definePredefinedSymbol(fScanChar);
+        definePredefinedSymbol(fScanString);
+
+        definePredefinedSymbol(fBooleanArray);
+        definePredefinedSymbol(fIntArray);
+        definePredefinedSymbol(fFloatArray);
+        definePredefinedSymbol(fDoubleArray);
+        definePredefinedSymbol(fCharArray);
+        definePredefinedSymbol(fStringArray);
+        definePredefinedSymbol(fLongArray);
     }
 
     public Type getDefinedType(String name){
