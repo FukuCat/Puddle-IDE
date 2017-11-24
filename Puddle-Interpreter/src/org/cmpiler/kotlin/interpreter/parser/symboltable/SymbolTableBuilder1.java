@@ -14,12 +14,11 @@ import java.util.*;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.swing.JOptionPane;
 import org.antlr.symtab.*;
+import org.cmpiler.kotlin.Driver;
 import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.antlr.KotlinParserBaseListener;
-import org.cmpiler.kotlin.interpreter.console.Console;
-import org.cmpiler.kotlin.interpreter.parser.CodeValidator;
-import org.cmpiler.kotlin.interpreter.parser.ErrorDictionary;
 
 public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     
@@ -55,6 +54,9 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                 else if(name.contains("while ")||name.contains("while(")){
                     whileLoop(name);
                 }
+                else if(name.contains("for ")||name.contains("for(")){
+                    forLoop(name);
+                }
                 else if(name.contains("scan ")||name.contains("scan(")){
                     scan(name);
                 }
@@ -83,7 +85,11 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         name = name.replaceAll("Float", "");
         name = name.replaceAll("Boolean", "");
         name = name.replaceAll("IntArray", "");
+        name = name.replaceAll("const", "");
         String[] myArr = name.split("=");
+        if(Character.isAlphabetic(myArr[1].charAt(0)) || myArr[1].charAt(0) == '_'){
+            myArr[1] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(myArr[1]));
+        }
         SymbolTableHandler.getInstance().getSymbolValue().put(myArr[0], myArr[1]);
     }
     
@@ -108,16 +114,23 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                 myArr1[0] = myArr1[0].replaceAll("else", "");
                 myArr1[0] = myArr1[0].replaceAll("if", "");
                 String temp = "", temp1 = "";
+                boolean check = false;
                 for(int j=0; j<myArr1[0].length(); j++){
-                    if(Character.isAlphabetic(myArr1[0].charAt(j))){
+                    if(Character.isAlphabetic(myArr1[0].charAt(j)) || myArr1[0].charAt(j) == '_' ||(Character.isDigit(myArr1[0].charAt(j)))&&!check){
                         temp1 = temp1.concat(String.valueOf(myArr1[0].charAt(j)));
+                        check = false;
                     }
                     else{
+                        check = true;
                         if(!temp1.equals(""))
                             temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
                         temp = temp.concat(temp1);
                         temp = temp.concat(String.valueOf(myArr1[0].charAt(j)));
                         temp1 = "";
+                    }
+                    if(!temp1.equals("") && (j == (myArr1[0].length()-1))){
+                        temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
+                        temp = temp.concat(temp1);
                     }
                 }
                 try {
@@ -145,10 +158,61 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         }
     }
     
+    public void forLoop(String name){
+        String[] myArr = null, myArr1 = null;
+        myArr = name.split("[\\r\\n]+");
+        myArr[0] = myArr[0].replaceAll("Int", "");
+        myArr1 = myArr[0].split("in");
+        myArr1[1] = myArr1[1].replaceAll("\\s+", "");
+        myArr1[1] = myArr1[1].replaceAll("\\)", "");
+        myArr1[1] = myArr1[1].replaceAll("\\{", "");
+        myArr[0] = myArr1[1];
+        myArr1 = null;
+        myArr1 = myArr[0].split("\\.\\.");
+        for(int j=0; j<myArr.length; j++){
+           myArr[j] = myArr[j].replaceAll("\\{", "");
+           myArr[j] = myArr[j].replaceAll("\\}", "");
+        }
+        String temp = "";
+        int init = 0, fin = 0, k = 0;
+        boolean first = true;
+        for(int j=0; j<myArr1.length; j++){
+            temp = "";
+            k=0;
+            while(k<myArr1[j].length()){
+                temp = temp.concat(String.valueOf(myArr1[j].charAt(k)));
+                k++;
+            }
+            if(Character.isAlphabetic(myArr1[j].charAt(0))|| myArr1[j].charAt(0) == '_'){
+                temp = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp));
+            }
+            if(first){
+                init = Integer.parseInt(temp);
+                first = false;
+            }
+            else{
+                fin = Integer.parseInt(temp);
+            }
+        }
+        while(init<fin){
+            for(int j=1; j<myArr.length; j++){
+                if(myArr[j].contains("scan")){
+                    scan(myArr[j]);
+                }
+                else if(myArr[j].contains("print")){
+                    print(myArr[j]);
+                }
+                else if(myArr[j].contains("*")||myArr[j].contains("/")||myArr[j].contains("+")||myArr[j].contains("-")){
+                    math(myArr[j]);
+                }
+            }
+            init++;
+        }
+    }
+    
     public void whileLoop(String name){
         boolean whilecheck = true;
         String[] myArr = null;
-        int[] container = {0,0,0};
         while(whilecheck){
             myArr = name.split("[\\r\\n]+");
             myArr[0] = myArr[0].replaceAll("while", "");
@@ -160,15 +224,25 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                myArr[j] = myArr[j].replaceAll("\\}", "");
             }
             String temp = "", temp1 = "";
-            for(int j=0; j<myArr[0].length(); j++){
-                if(Character.isAlphabetic(myArr[0].charAt(j))){
-                    temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(String.valueOf(myArr[0].charAt(j))));
-                    temp = temp.concat(temp1);
+            boolean check = false;
+                for(int j=0; j<myArr[0].length(); j++){
+                    if(Character.isAlphabetic(myArr[0].charAt(j))|| myArr[0].charAt(j) == '_' ||(Character.isDigit(myArr[0].charAt(j)))&&!check){
+                        temp1 = temp1.concat(String.valueOf(myArr[0].charAt(j)));
+                        check = false;
+                    }
+                    else{
+                        check = true;
+                        if(!temp1.equals(""))
+                            temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
+                        temp = temp.concat(temp1);
+                        temp = temp.concat(String.valueOf(myArr[0].charAt(j)));
+                        temp1 = "";
+                    }
+                    if(!temp1.equals("") && (j == (myArr[0].length()-1))){
+                        temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
+                        temp = temp.concat(temp1);
+                    }
                 }
-                else{
-                    temp = temp.concat(String.valueOf(myArr[0].charAt(j)));
-                }
-            }
             try {
                 ScriptEngineManager sem = new ScriptEngineManager();
                 ScriptEngine se = sem.getEngineByName("JavaScript");
@@ -199,9 +273,21 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         for(int j=0;j<myArr.length; j++){
             myArr[j] = myArr[j].replaceAll("[(+)]","");
             myArr[j] = myArr[j].replaceAll("\\s+","");
+            myArr[j] = myArr[j].replaceAll(";","");
         }
-        Scanner sc = new Scanner(System.in);
-        input = sc.nextLine();
+        /*Scanner sc = new Scanner(System.in);
+        input = sc.nextLine();*/
+        /*while(true){
+            print("zup");
+        }*/
+        while(input.equals("")){
+            input = (String)JOptionPane.showInputDialog(
+                        Driver.frame,
+                        "Enter input:\n",
+                        "Input Dialog",
+                        JOptionPane.PLAIN_MESSAGE);
+        }
+        System.out.println(input);
 //                if(SymbolTableHandler.isSymbolDefinedInCurrentScope(myArr[myArr.length-1])) {
         SymbolTableHandler.getInstance().getSymbolValue().put(myArr[myArr.length-1], input);
 //               }
@@ -213,6 +299,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
             if(myArr[j].contains("+")){
                 myArr[j] = myArr[j].replaceAll("[(+)]","");
                 myArr[j] = myArr[j].replaceAll("\\s+","");
+                myArr[j] = myArr[j].replaceAll(";","");
                 myArr[j] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(myArr[j]));
             }
             else{

@@ -15,9 +15,9 @@ package org.cmpiler.kotlin;
 // Lexer added reserved keywords
 // parser added reserved keywords rule to "type" rule
 
-import org.cmpiler.kotlin.interpreter.parser.Interpreter;
+import org.cmpiler.kotlin.ide.view.window.*;
 
-import java.io.IOException;
+import javax.swing.JFrame;
 
 /*
 * TODO
@@ -26,9 +26,10 @@ import java.io.IOException;
 * 3) error when no main function found
 * */
 public class Driver {
+    public static JFrame frame;
     public static void main(String[] args){
-
-        try {
+        frame = new MainWindow("Puddle IDE",1280,720);
+        /*try {
             Interpreter.getInstance().parseFile("rcs/template/test.kt","UTF-8");
             /*
             Interpreter.getInstance().parseText(
@@ -48,9 +49,9 @@ public class Driver {
                             "}"
             );
             */
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

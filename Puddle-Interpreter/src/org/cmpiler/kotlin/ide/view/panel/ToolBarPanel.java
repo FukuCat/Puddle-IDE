@@ -3,6 +3,9 @@ package org.cmpiler.kotlin.ide.view.panel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import org.cmpiler.kotlin.ide.view.actions.OpenAction;
+import org.cmpiler.kotlin.ide.view.actions.SaveAction;
+import org.cmpiler.kotlin.ide.view.actions.TestAction;
 
 public class ToolBarPanel extends JPanel {
     private ArrayList<JMenuItem> mi_array;
@@ -35,9 +38,9 @@ public class ToolBarPanel extends JPanel {
         for(int i = 2; i < 3; i++)
             m_run.add(mi_array.get(i));
 
-        //mi_array.get(0).addActionListener(new OpenAction(this));
-        //mi_array.get(1).addActionListener(new SaveAction(this));
-        //mi_array.get(2).addActionListener(new TestAction());
+        mi_array.get(0).addActionListener(new OpenAction(this));
+        mi_array.get(1).addActionListener(new SaveAction(this));
+        mi_array.get(2).addActionListener(new TestAction());
 
         mb_toolbar.add(m_file);
         mb_toolbar.add(m_run);

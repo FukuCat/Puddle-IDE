@@ -26,7 +26,7 @@ public class SharedData {
     private SharedData(){
         editorTextArea = new RSyntaxTextArea();
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
-        atmf.putMapping("text/puddle", "view.components.editorSyntax.KotlinTokenMaker");
+        atmf.putMapping("text/puddle", "org.cmpiler.kotlin.ide.view.components.editorSyntax.KotlinTokenMaker");
         editorTextArea.setSyntaxEditingStyle("text/puddle");
 
         editorScrollArea = new RTextScrollPane(editorTextArea);

@@ -2,6 +2,9 @@ package org.cmpiler.kotlin.ide.view.window;
 
 import javax.swing.*;
 import java.awt.*;
+import org.cmpiler.kotlin.ide.view.panel.ConsolePanel;
+import org.cmpiler.kotlin.ide.view.panel.TextEditorPanel;
+import org.cmpiler.kotlin.ide.view.panel.ToolBarPanel;
 
 public class MainWindow extends JFrame{
 
@@ -19,9 +22,9 @@ public class MainWindow extends JFrame{
         layout.setVgap(0);
         layout.setHgap(0);
         container.setLayout(layout);
-        //container.add(new ToolBarPanel(w,TOOLBAR_HEIGHT));
-        //container.add(new TextEditorPanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .70)));
-        //container.add(new ConsolePanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .30)));
+        container.add(new ToolBarPanel(w,TOOLBAR_HEIGHT));
+        container.add(new TextEditorPanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .70)));
+        container.add(new ConsolePanel(w,(int)((h - TOOLBAR_HEIGHT * 2) * .30)));
         // center
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) (dimension.getWidth() / 2) - w/2;
