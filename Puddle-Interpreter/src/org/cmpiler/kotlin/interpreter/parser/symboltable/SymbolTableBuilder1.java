@@ -406,7 +406,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
 
     private Scope getCurrentScope(){return SymbolTableHandler.getCurrentScope();}
 
-    private Type getPredefienedType(String name){ return  SymbolTableHandler.getDefinedType(name); }
+    private Type getPredefienedType(String name){ return  SymbolTableHandler.getInstance().getDefinedType(name); }
 
     private Symbol getPredefinedSymbol(String name){ return SymbolTableHandler.getPredefinedSymbol(name);}
 

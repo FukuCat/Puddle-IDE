@@ -1,9 +1,6 @@
 // Generated from src\org\cmpiler\kotlin\antlr\KotlinParser.g4 by ANTLR 4.7
 package org.cmpiler.kotlin.antlr;
 
-import org.antlr.symtab.*;
-import org.antlr.v4.runtime.misc.Utils;
-
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

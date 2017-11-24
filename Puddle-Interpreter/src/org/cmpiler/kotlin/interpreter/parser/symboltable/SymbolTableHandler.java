@@ -63,15 +63,15 @@ public class SymbolTableHandler extends SymbolTable{
         definePredefinedSymbol(new FunctionSymbol("scan"));
     }
 
-    public static Type getDefinedType(String name){
-        if(getPredefinedSymbol(name) instanceof PrimitiveType) {
-            return (PrimitiveType) getPredefinedSymbol(name);
+    public Type getDefinedType(String name){
+        if(currentScope.resolve(name) instanceof PrimitiveType) {
+            return (PrimitiveType) currentScope.resolve(name);
         }
-        if(getPredefinedSymbol(name) instanceof TypeAlias) {
-            return (TypeAlias) getPredefinedSymbol(name);
+        if(currentScope.resolve(name) instanceof TypeAlias) {
+            return (TypeAlias) currentScope.resolve(name);
         }
-        if(getPredefinedSymbol(name) instanceof DataAggregateSymbol) {
-            return (DataAggregateSymbol) getPredefinedSymbol(name);
+        if(currentScope.resolve(name) instanceof DataAggregateSymbol) {
+            return (DataAggregateSymbol) currentScope.resolve(name);
         }
         return null;
     }
@@ -95,6 +95,8 @@ public class SymbolTableHandler extends SymbolTable{
         return getInstance().currentScope.getSymbol(name) != null || getInstance().GLOBALS.getSymbol(name) != null || getInstance().PREDEFINED.getSymbol(name) != null;
     }
     public static Scope getCurrentScope(){ return getInstance().currentScope; }
+
+    public void setCurrentScope(Scope scope){this.currentScope = scope;}
 
     public void printTable(){
     }

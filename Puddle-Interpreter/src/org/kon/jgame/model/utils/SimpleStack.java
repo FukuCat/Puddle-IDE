@@ -39,7 +39,15 @@ public class SimpleStack<T> {
 	public boolean isEmpty(){
 			return stack.isEmpty();
 		}
-		
+
+	public void reverse(){
+		SimpleStack<T> temp = new SimpleStack<>();
+		while(!stack.isEmpty()){
+			temp.push(pop());
+		}
+		setStack(temp.getStack());
+	}
+
 	// other
 
 	public T[] toArray(){

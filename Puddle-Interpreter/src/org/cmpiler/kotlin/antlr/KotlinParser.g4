@@ -274,7 +274,7 @@ typeConstraint
     : annotations* simpleIdentifier NL* COLON NL* type
     ;
 
-block
+block returns [org.antlr.symtab.Scope scope]
     : LCURL NL* (statement semi)* (statement semi?)? NL* RCURL
     ;
 
@@ -574,15 +574,15 @@ loopExpression
     | doWhileExpression
     ;
 
-forExpression
+forExpression  returns [org.antlr.symtab.Scope scope]
     : FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
     ;
 
-whileExpression
+whileExpression  returns [org.antlr.symtab.Scope scope]
     : WHILE NL* LPAREN expression RPAREN NL* controlStructureBody?
     ;
 
-doWhileExpression
+doWhileExpression  returns [org.antlr.symtab.Scope scope]
     : DO NL* controlStructureBody? NL* WHILE NL* LPAREN expression RPAREN
     ;
 

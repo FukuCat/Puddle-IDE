@@ -1,17 +1,13 @@
 // Generated from src\org\cmpiler\kotlin\antlr\KotlinParser.g4 by ANTLR 4.7
 package org.cmpiler.kotlin.antlr;
 
-import org.antlr.symtab.*;
 import org.antlr.v4.runtime.misc.Utils;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class KotlinParser extends Parser {
@@ -6053,6 +6049,7 @@ public class KotlinParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
+		public org.antlr.symtab.Scope scope;
 		public TerminalNode LCURL() { return getToken(KotlinParser.LCURL, 0); }
 		public TerminalNode RCURL() { return getToken(KotlinParser.RCURL, 0); }
 		public List<TerminalNode> NL() { return getTokens(KotlinParser.NL); }

@@ -8,8 +8,11 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.cmpiler.kotlin.antlr.KotlinLexer;
 import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.interpreter.console.Console;
+import org.cmpiler.kotlin.interpreter.other.ParserErrorListener;
+import org.cmpiler.kotlin.interpreter.other.ParserErrorStrategy;
 import org.cmpiler.kotlin.interpreter.parser.symboltable.SymbolTableBuilder;
 import org.cmpiler.kotlin.interpreter.parser.symboltable.SymbolTableBuilder1;
+import org.cmpiler.kotlin.interpreter.parser.symboltable.SymbolTableEvaluator;
 import org.cmpiler.kotlin.interpreter.parser.symboltable.SymbolTableHandler;
 
 import java.io.IOException;
@@ -69,6 +72,9 @@ public class Interpreter {
         parser.removeErrorListeners();
         //parser.addErrorListener(new DiagnosticErrorListener());
         parser.addErrorListener(CodeValidator.getInstance());
+
+        parser.addErrorListener(new ParserErrorListener());
+        parser.setErrorHandler(new ParserErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         return parser;
     }
@@ -76,7 +82,7 @@ public class Interpreter {
     private void parseCode(KotlinParser parser){
         // test tree
         ParserRuleContext parserRuleContext = parser.kotlinFile();
-        Console.log(Console.DEV_CONSOLE, "Parse Tree: " + parserRuleContext.toStringTree(parser));
+        //Console.log(Console.DEV_CONSOLE, "Parse Tree: " + parserRuleContext.toStringTree(parser));
 
         // build & test symbol table
         if(CodeValidator.getInstance().isValid()) {
@@ -87,6 +93,7 @@ public class Interpreter {
             // build scopes and check scope validity
             // will check if a symbol has been defined more than once in a scope
             treeWalker.walk(new SymbolTableBuilder(), parserRuleContext); //TODO: make another listener solely for highlighting
+            treeWalker.walk(new SymbolTableEvaluator(), parserRuleContext);
             SymbolTableHandler.getInstance().printTable();
             Console.log(Console.USER_CONSOLE, "Parsing done. Click RUN to execute.");
         }

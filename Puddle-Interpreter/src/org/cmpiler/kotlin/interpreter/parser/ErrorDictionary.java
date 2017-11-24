@@ -51,5 +51,4 @@ public class ErrorDictionary {
         return "ERROR! Error number ["+errorCode+"] is undefined. Please define in ErrorDictionary.java";
     }
 
-
 }
