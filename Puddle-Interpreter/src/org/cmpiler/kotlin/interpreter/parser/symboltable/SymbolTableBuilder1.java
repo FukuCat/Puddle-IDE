@@ -153,7 +153,23 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             mainRun = false;
                         }
                         if(!firstfunrun){
-                            if(myArr[j].contains("if ")||myArr[j].contains("if(")){
+                            if(myArr[j].contains("do {")||myArr[j].contains("do{")){
+                                braces = 1;
+                                String whileblock = myArr[j]+"\n";
+                                j++;
+                                while((braces>0)){
+                                    if(myArr[j].contains("}"))
+                                        braces--;
+                                    if(myArr[j].contains("{"))
+                                        braces++;
+                                    whileblock = whileblock.concat(myArr[j]+"\n");
+                                    j++;
+                                }
+                                j--;
+                                dowhileLoop(whileblock);
+                                whileblock = "";
+                            }
+                            else if(myArr[j].contains("if ")||myArr[j].contains("if(")){
                                 braces = 1;
                                 boolean firstrun = true;
                                 String ifblock = myArr[j]+"\n";
@@ -170,6 +186,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     ifblock = ifblock.concat(myArr[j]+"\n");
                                     j++;
                                 }
+                                //System.out.println("ifblock: "+ifblock);
                                 j--;
                                 String returnStatement = ifLoop(ifblock);
                                 if(returnStatement.contains("return")){
@@ -394,6 +411,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     }
     
     public String ifLoop(String name){
+        //System.out.println("name: "+name);
         String returnStatement = "";
         String[] myArr = null, myArr1 = null;
         myArr = name.split("else");
@@ -441,7 +459,12 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                 try {
                     ScriptEngineManager sem = new ScriptEngineManager();
                     ScriptEngine se = sem.getEngineByName("JavaScript");
+                    if(temp.contains("\"")){
+                        temp = temp.replaceAll("\"","\'");
+                    }
+                    //System.out.println("expression: "+temp);
                     checker = (boolean)se.eval(temp);
+                    //System.out.println("checker: "+checker);
                 } catch (ScriptException e) {
                     e.printStackTrace();
                 }
@@ -481,7 +504,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                         braces = 1;
                         String whileblock = myArr1[j]+"\n";
                         j++;
-                        while((braces>0)){
+                        while(braces>0){
                             if(myArr1[j].contains("}"))
                                 braces--;
                             if(myArr1[j].contains("{"))
@@ -668,6 +691,9 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
             try {
                 ScriptEngineManager sem = new ScriptEngineManager();
                 ScriptEngine se = sem.getEngineByName("JavaScript");
+                if(temp.contains("\"")){
+                    temp = temp.replaceAll("\"","\'");
+                }
                 whilecheck = (boolean)se.eval(temp);
             } catch (ScriptException e) {
                 e.printStackTrace();
@@ -675,6 +701,124 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
             int braces = 0;
             if(whilecheck){
                 for(int j=1; j<myArr.length; j++){
+                    if(myArr[j].contains("scan")){
+                        scan(myArr[j]);
+                    }
+                    else if(myArr[j].contains("println")){
+                        println(myArr[j]);
+                    }
+                    else if(myArr[j].contains("print")){
+                        print(myArr[j]);
+                    }
+                    else if(myArr[j].contains("if ")||myArr[j].contains("if(")){
+                        braces = 1;
+                        String ifblock = myArr[j]+"\n";
+                        j++;
+                        while((braces>0||myArr[j].contains("elseif")||myArr[j].contains("else{"))){
+                            if(myArr[j].contains("}"))
+                                braces--;
+                            if(myArr[j].contains("{"))
+                                braces++;
+                            ifblock = ifblock.concat(myArr[j]+"\n");
+                            j++;
+                        }
+                        j--;
+                        ifLoop(ifblock);
+                        ifblock = "";
+                    }
+                    else if(myArr[j].contains("while ")||myArr[j].contains("while(")){
+                        braces = 1;
+                        String whileblock = myArr[j]+"\n";
+                        j++;
+                        while((braces>0)){
+                            if(myArr[j].contains("}"))
+                                braces--;
+                            if(myArr[j].contains("{"))
+                                braces++;
+                            whileblock = whileblock.concat(myArr[j]+"\n");
+                            j++;
+                        }
+                        j--;
+                        whileLoop(whileblock);
+                        whileblock = "";
+                    }
+                    else if(myArr[j].contains("for ")||myArr[j].contains("for(")){
+                        braces = 1;
+                        String forblock = myArr[j]+"\n";
+                        j++;
+                        while((braces>0)){
+                            if(myArr[j].contains("}"))
+                                braces--;
+                            if(myArr[j].contains("{"))
+                                braces++;
+                            forblock = forblock.concat(myArr[j]+"\n");
+                            j++;
+                        }
+                        j--;
+                        forLoop(forblock);
+                        forblock = "";
+                    }
+                    else if(myArr[j].contains("=")){
+                        assign(myArr[j]);
+                    }
+                    else if(myArr[j].contains("*")||myArr[j].contains("/")||myArr[j].contains("+")||myArr[j].contains("-")){
+                        math(myArr[j]);
+                    }
+                }
+            }
+        }
+    }
+    
+    public void dowhileLoop(String name){
+        boolean whilecheck = true;
+        String[] myArr = null;
+        while(whilecheck){
+            myArr = name.split("[\\r\\n]+");
+            myArr[myArr.length-1] = myArr[myArr.length-1].replaceAll("while", "");
+            myArr[myArr.length-1] = myArr[myArr.length-1].replaceAll("\\s+", "");
+            myArr[myArr.length-1] = myArr[myArr.length-1].replaceAll("\\(", "");
+            myArr[myArr.length-1] = myArr[myArr.length-1].replaceAll("\\)", "");
+            myArr[myArr.length-1] = myArr[myArr.length-1].replaceAll("\\}", "");
+            String temp = "", temp1 = "";
+            boolean check = false;
+            for(int j=0; j<myArr[myArr.length-1].length(); j++){
+                if(Character.isAlphabetic(myArr[myArr.length-1].charAt(j))|| myArr[myArr.length-1].charAt(j) == '_' ||(Character.isDigit(myArr[myArr.length-1].charAt(j)))&&!check){
+                    temp1 = temp1.concat(String.valueOf(myArr[myArr.length-1].charAt(j)));
+                    check = false;
+                }
+                else{
+                    check = true;
+                    if(!temp1.equals("")){
+                        if(functionCall && funVariables.containsKey(temp1))
+                            temp1 = funVariables.get(temp1);
+                        else
+                            temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
+                    }
+                    temp = temp.concat(temp1);
+                    temp = temp.concat(String.valueOf(myArr[myArr.length-1].charAt(j)));
+                    temp1 = "";
+                }
+                if(!temp1.equals("") && (j == (myArr[myArr.length-1].length()-1))){
+                    if(functionCall && funVariables.containsKey(temp1))
+                        temp1 = funVariables.get(temp1);
+                    else
+                        temp1 = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(temp1));
+                    temp = temp.concat(temp1);
+                }
+            }
+            try {
+                ScriptEngineManager sem = new ScriptEngineManager();
+                ScriptEngine se = sem.getEngineByName("JavaScript");
+                if(temp.contains("\"")){
+                    temp = temp.replaceAll("\"","\'");
+                }
+                whilecheck = (boolean)se.eval(temp);
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+            int braces = 0;
+            if(whilecheck){
+                for(int j=1; j<myArr.length-1; j++){
                     if(myArr[j].contains("scan")){
                         scan(myArr[j]);
                     }
@@ -783,6 +927,10 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                 myArr[j] = myArr[j].replaceAll("\\{","");
                 myArr[j] = myArr[j].replaceAll("\\}","");
             }
+            if(Character.isAlphabetic(input.charAt(0))&&input.length()<=1){
+                String temp = "\""+input+"\"";
+                input = temp;
+            }
             if(functionCall && funVariables.containsKey(myArr[myArr.length-1]))
                 funVariables.put(myArr[myArr.length-1], input);
             else
@@ -850,7 +998,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                     String[] myArr1 = myArr[j].split("\\(");
                     myArr1[1] = myArr1[1].replaceAll("\\)", "");
                     myArr1[1] = myArr1[1].replaceAll("\\;", "");
-                    String result = mathEquation(myArr1[1]);
+                    String result = mathEquationDecimal(myArr1[1]);
                     myArr[j] = result;
                 }
                 else{
@@ -879,7 +1027,6 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     }
     
     public void math(String name){
-        System.out.println("Equation: "+name);
         String[] myArr = name.split("\"");
         try{
             ScriptEngineManager mgr = new ScriptEngineManager();
@@ -932,6 +1079,55 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    
+    public String mathEquationDecimal(String equation){
+        String answer = "";
+        try{
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
+            String temp = "";
+            String[] myArr1;
+            temp = equation.replaceAll("\\+"," ");
+            temp = temp.replaceAll("\\-"," ");
+            temp = temp.replaceAll("\\*"," ");
+            temp = temp.replaceAll("\\/"," ");
+            temp = temp.replaceAll("\\(","");
+            temp = temp.replaceAll("\\)","");
+            myArr1 = temp.split("\\s+");
+            for(int j=0; j<myArr1.length; j++){
+                if(myArr1[j].matches(".*[a-zA-Z]+.*")){
+                    if(functionCall && funVariables.containsKey(myArr1[j])){
+                       myArr1[j] = funVariables.get(myArr1[j]); 
+                    }
+                    else
+                        myArr1[j] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(myArr1[j]));
+                    myArr1[j] = myArr1[j].replaceAll("f", "");
+                }
+            }
+            String finalequation = "";
+            int count = 0, k = 0;
+            boolean check = false;
+            while(count < equation.length()){
+                if(!Character.isAlphabetic(equation.charAt(count))&&!Character.isDigit(equation.charAt(count))){
+                    finalequation = finalequation.concat(String.valueOf(equation.charAt(count)));
+                    check = false;
+                }
+                else if(!check){
+                    finalequation = finalequation.concat(myArr1[k]);
+                    k++;
+                    check = true;
+                }
+                count++;
+            }
+            equation = String.valueOf(engine.eval(finalequation));
+            count = 0;
+            boolean stop = false;
+            answer = equation;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return answer;
     }
     
     public String mathEquation(String equation){
