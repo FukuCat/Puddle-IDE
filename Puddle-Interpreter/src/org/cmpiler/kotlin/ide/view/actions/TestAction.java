@@ -1,12 +1,10 @@
 package org.cmpiler.kotlin.ide.view.actions;
 
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+
 import org.cmpiler.kotlin.ide.model.SharedData;
-import org.cmpiler.kotlin.interpreter.parser.Interpreter;
+import org.cmpiler.kotlin.interpreter.Interpreter.Interpreter;
 
 public class TestAction implements ActionListener {
 

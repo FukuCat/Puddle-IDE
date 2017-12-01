@@ -1,4 +1,4 @@
-package org.cmpiler.kotlin.interpreter.console;
+package org.cmpiler.kotlin.utils.console;
 
 public class LogItem {
 

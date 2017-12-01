@@ -1,4 +1,4 @@
-package org.cmpiler.kotlin.interpreter.parser;
+package org.cmpiler.kotlin.utils;
 
 import java.util.HashMap;
 
@@ -8,6 +8,8 @@ public class ErrorDictionary {
 
     public final static int INCONSISTENT_CLASS_NAME = 1000;
     public final static int TYPE_MISMATCH = 2000;
+    public final static int TYPE_CAST_MISMATCH = 2333;
+    public final static int TYPE_RETURN = 2999;
     public final static int UNDECLARED_VARIABLE = 3000;
     public final static int UNDECLARED_FUNCTION = 3333;
     public final static int UNDECLARED_TYPE = 3666;
@@ -19,6 +21,7 @@ public class ErrorDictionary {
     public final static int PARAMETER_COUNT_MISMATCH = 6000;
     public final static int RUNTIME_ARRAY_OUT_OF_BOUNDS = 7000;
     public final static int MISSING_THIS_KEYWORD = 8000;
+    public final static int MISSING_MAIN = 8555;
 
     private HashMap<Integer, String> dictionary;
 
@@ -32,6 +35,8 @@ public class ErrorDictionary {
     private void initialize(){
         dictionary.put(INCONSISTENT_CLASS_NAME, "Inconsistent class name. ");
         dictionary.put(TYPE_MISMATCH, "Type mismatch at line %d. ");
+        dictionary.put(TYPE_RETURN, "Return type not compatible with function declaration at line %d. ");
+        dictionary.put(TYPE_CAST_MISMATCH, "Cannot cast type on %s at line %d. ");
         dictionary.put(UNDECLARED_VARIABLE, "Undeclared variable %s at line %d. ");
         dictionary.put(UNDECLARED_FUNCTION, "Undeclared function %s at line %d. ");
         dictionary.put(UNDECLARED_TYPE, "Undeclared type on function or variable %s at line %d. ");
@@ -43,6 +48,7 @@ public class ErrorDictionary {
         dictionary.put(PARAMETER_COUNT_MISMATCH, "Argument size for method call %s at line %d does not match with its declaration. ");
         dictionary.put(RUNTIME_ARRAY_OUT_OF_BOUNDS, "Array %s out of bounds. Aborting operation. ");
         dictionary.put(MISSING_THIS_KEYWORD, "Missing 'this' keyword for method call %s line %d.");
+        dictionary.put(MISSING_MAIN, "Missing main function.");
     }
 
     public static String getMessage(int errorCode){

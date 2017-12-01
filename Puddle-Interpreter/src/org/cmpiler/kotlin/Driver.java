@@ -16,8 +16,11 @@ package org.cmpiler.kotlin;
 // parser added reserved keywords rule to "type" rule
 
 import org.cmpiler.kotlin.ide.view.window.*;
+import org.cmpiler.kotlin.interpreter.Interpreter.Interpreter;
+import org.cmpiler.kotlin.utils.config.GlobalConfig;
 
 import javax.swing.JFrame;
+import java.io.IOException;
 
 /*
 * TODO
@@ -28,30 +31,21 @@ import javax.swing.JFrame;
 public class Driver {
     public static JFrame frame;
     public static void main(String[] args){
-        frame = new MainWindow("Puddle IDE",1280,720);
-        /*try {
-            Interpreter.getInstance().parseFile("rcs/template/test.kt","UTF-8");
-            /*
-            Interpreter.getInstance().parseText(
-                    "fun main(args : Array<String>) {\n" +
-                            "\tval x: Int = 0\n" +
-                            "\tval _veryWeirdIdentifier567: Float = 999.9\n" +
-                            "\tval y = (5 > 4 && true) || (false && !(x==0))\n" +
-                            "\tval myArray: Array<Integer> = Array(10)\n" +
-                            "\t\n" +
-                            "\tscan(\"What is the input: \" ,x)\n" +
-                            "\tprint(\"Input: \" ,x)\n" +
-                            "\t\n" +
-                            "\tfor(i in 1..5) {\n" +
-                            "\t\tval x: Float = 0\n" +
-                            "\t\tprint(\"Hello world\");\n" +
-                            "\t}\n" +
-                            "}"
-            );
-            */
-        /*} catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        GlobalConfig g = GlobalConfig.getInstance();
 
+        if(g.isRunUI()){
+            frame = new MainWindow("Puddle IDE",1280,720);
+        } else {
+            if(g.isQuickRun())quickRun(g.getQuickRunPath(),"UTF-8");
+        }
+    }
+
+    private static void quickRun(String path, String charset){
+        try {
+            Interpreter.getInstance().parseFile(path, charset);
+            //Interpreter.getInstance().execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

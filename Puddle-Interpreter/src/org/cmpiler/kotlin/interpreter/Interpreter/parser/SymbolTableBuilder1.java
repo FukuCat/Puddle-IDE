@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cmpiler.kotlin.interpreter.parser.symboltable;
+package org.cmpiler.kotlin.interpreter.Interpreter.parser;
 
 /**
  *
@@ -21,7 +21,9 @@ import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.antlr.KotlinParserBaseListener;
 
 public class SymbolTableBuilder1 extends KotlinParserBaseListener {
-    
+
+    private SymbolTableHandler symtab = SymbolTableHandler.getInstance();
+
     private boolean end = false, functionCall = false, executeFunctionAgain = false;
     private HashMap <String,String> funVariables;
     private HashMap <String, String[]> arrayValues;
@@ -103,7 +105,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                             tempCon[l] = funVariables.get(tempCon[l]);
                                          }
                                         else{
-                                            tempCon[l] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(tempCon[l]));
+                                            tempCon[l] = String.valueOf(symtab.getSymbolValue().get(tempCon[l]));
                                         }
                                     }
                                 }
@@ -145,7 +147,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             myArr = name.split("[\\r\\n]+");
                             firstfunrun = true;
                             returnValue = mathEquation(carryOnFormula+""+returnValue);
-                            SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
+                            symtab.getSymbolValue().put(returnVariable, returnValue);
                             carryOnFormula = "";
                             firstStoreMainReturn = true;
                         }
@@ -1235,11 +1237,11 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     @Override public void exitLoopExpression(KotlinParser.LoopExpressionContext ctx) {
     }
 
-    private Scope getCurrentScope(){return SymbolTableHandler.getCurrentScope();}
+    private Scope getCurrentScope(){return symtab.getCurrentScope();}
 
-    private Type getPredefienedType(String name){ return  SymbolTableHandler.getDefinedType(name); }
+    private Type getPredefienedType(String name){ return  symtab.getDefinedType(name); }
 
-    private Symbol getPredefinedSymbol(String name){ return SymbolTableHandler.getPredefinedSymbol(name);}
+    private Symbol getPredefinedSymbol(String name){ return symtab.getPredefinedSymbol(name);}
 
 
 }

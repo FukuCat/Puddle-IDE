@@ -1,13 +1,12 @@
-package org.kon.jgame.model.utils;
+package org.kon.jgame.model.utils.list;
 
 import java.util.LinkedList;
-import java.util.List;
 
-public class SimpleQueue<T> {
+public class Queue<T> {
 	private LinkedList<T> queue;
 	private int size;
 		
-	public SimpleQueue(){
+	public Queue(){
 		setQueue(new LinkedList<T>());
 		size = 0;
 	}
