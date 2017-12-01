@@ -264,10 +264,8 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                 myArr = name.split("[\\r\\n]+");
                             //}
                             firstfunrun = true;
-<<<<<<< HEAD:Puddle-Interpreter/src/org/cmpiler/kotlin/interpreter/Interpreter/parser/SymbolTableBuilder1.java
                             returnValue = mathEquation(carryOnFormula+""+returnValue);
                             symtab.getSymbolValue().put(returnVariable, returnValue);
-=======
                             if(carryOnFormula.contains("+")||carryOnFormula.contains("-")||carryOnFormula.contains("*")||carryOnFormula.contains("/")){
                                 returnValue = mathEquation(carryOnFormula+""+returnValue);
                                 SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
@@ -278,7 +276,6 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             else{
                                 SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
                             }
->>>>>>> refs/remotes/origin/master:Puddle-Interpreter/src/org/cmpiler/kotlin/interpreter/parser/symboltable/SymbolTableBuilder1.java
                             carryOnFormula = "";
                             firstStoreMainReturn = true;
                             isReturnArray = false;
