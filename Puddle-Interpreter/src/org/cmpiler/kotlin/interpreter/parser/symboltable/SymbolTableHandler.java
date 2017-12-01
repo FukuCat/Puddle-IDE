@@ -11,7 +11,11 @@ public class SymbolTableHandler extends SymbolTable{
 
     private Scope currentScope;
     private Scope mainScope;
-
+    public static String TEMP1 = "divideCounter";
+    public static String TEMP2 = "conquerCounter";
+    public static String TEMP3 = "sortedArr";
+    public static String TEMP4 = "mergeSortProper";
+    public static String TEMP5 = "merge";
     private HashMap<Symbol, Integer> symbolArraySize;
     private HashMap<Symbol, String> symbolVisibility; // private, public, internal
     private HashSet<Symbol> symbolConstant; // val is constant and will be added here
