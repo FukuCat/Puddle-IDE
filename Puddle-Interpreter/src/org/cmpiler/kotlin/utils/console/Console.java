@@ -1,6 +1,6 @@
-package org.cmpiler.kotlin.interpreter.console;
+package org.cmpiler.kotlin.utils.console;
 
-import org.kon.jgame.model.utils.SimpleQueue;
+import org.kon.jgame.model.utils.list.Queue;
 
 public class Console {
 
@@ -11,10 +11,10 @@ public class Console {
     public static final int DEV_CONSOLE = 3;
     public static final int DEV_ERROR = 4;
 
-    private SimpleQueue<LogItem> logs;
+    private Queue<LogItem> logs;
 
     private Console(){
-        logs = new SimpleQueue<>();
+        logs = new Queue<>();
     }
 
 

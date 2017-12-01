@@ -22,26 +22,6 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitKotlinFile(KotlinParser.KotlinFileContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link KotlinParser#script}.
-	 * @param ctx the parse tree
-	 */
-	void enterScript(KotlinParser.ScriptContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KotlinParser#script}.
-	 * @param ctx the parse tree
-	 */
-	void exitScript(KotlinParser.ScriptContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link KotlinParser#fileAnnotation}.
-	 * @param ctx the parse tree
-	 */
-	void enterFileAnnotation(KotlinParser.FileAnnotationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KotlinParser#fileAnnotation}.
-	 * @param ctx the parse tree
-	 */
-	void exitFileAnnotation(KotlinParser.FileAnnotationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link KotlinParser#packageHeader}.
 	 * @param ctx the parse tree
 	 */
@@ -301,26 +281,6 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionBody(KotlinParser.FunctionBodyContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link KotlinParser#objectDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterObjectDeclaration(KotlinParser.ObjectDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KotlinParser#objectDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitObjectDeclaration(KotlinParser.ObjectDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link KotlinParser#companionObject}.
-	 * @param ctx the parse tree
-	 */
-	void enterCompanionObject(KotlinParser.CompanionObjectContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KotlinParser#companionObject}.
-	 * @param ctx the parse tree
-	 */
-	void exitCompanionObject(KotlinParser.CompanionObjectContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KotlinParser#propertyDeclaration}.
 	 * @param ctx the parse tree

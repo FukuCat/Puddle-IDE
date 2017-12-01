@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.cmpiler.kotlin.interpreter.parser.symboltable;
+package org.cmpiler.kotlin.interpreter.Interpreter.parser;
 
 /**
  *
@@ -21,7 +21,9 @@ import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.antlr.KotlinParserBaseListener;
 
 public class SymbolTableBuilder1 extends KotlinParserBaseListener {
-    
+
+    private SymbolTableHandler symtab = SymbolTableHandler.getInstance();
+
     private boolean end = false, functionCall = false, executeFunctionAgain = false;
     private HashMap <String,String> funVariables;
     private HashMap <String, String[]> arrayValues;
@@ -202,7 +204,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                             tempCon[l] = funVariables.get(tempCon[l]);
                                         }
                                         else{
-                                            tempCon[l] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(tempCon[l]));
+                                            tempCon[l] = String.valueOf(symtab.getSymbolValue().get(tempCon[l]));
                                         }
                                     }
                                 }
@@ -262,6 +264,10 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                 myArr = name.split("[\\r\\n]+");
                             //}
                             firstfunrun = true;
+<<<<<<< HEAD:Puddle-Interpreter/src/org/cmpiler/kotlin/interpreter/Interpreter/parser/SymbolTableBuilder1.java
+                            returnValue = mathEquation(carryOnFormula+""+returnValue);
+                            symtab.getSymbolValue().put(returnVariable, returnValue);
+=======
                             if(carryOnFormula.contains("+")||carryOnFormula.contains("-")||carryOnFormula.contains("*")||carryOnFormula.contains("/")){
                                 returnValue = mathEquation(carryOnFormula+""+returnValue);
                                 SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
@@ -272,6 +278,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             else{
                                 SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
                             }
+>>>>>>> refs/remotes/origin/master:Puddle-Interpreter/src/org/cmpiler/kotlin/interpreter/parser/symboltable/SymbolTableBuilder1.java
                             carryOnFormula = "";
                             firstStoreMainReturn = true;
                             isReturnArray = false;
@@ -1369,11 +1376,11 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     @Override public void exitLoopExpression(KotlinParser.LoopExpressionContext ctx) {
     }
 
-    private Scope getCurrentScope(){return SymbolTableHandler.getCurrentScope();}
+    private Scope getCurrentScope(){return symtab.getCurrentScope();}
 
-    private Type getPredefienedType(String name){ return  SymbolTableHandler.getDefinedType(name); }
+    private Type getPredefienedType(String name){ return  symtab.getDefinedType(name); }
 
-    private Symbol getPredefinedSymbol(String name){ return SymbolTableHandler.getPredefinedSymbol(name);}
+    private Symbol getPredefinedSymbol(String name){ return symtab.getPredefinedSymbol(name);}
 
     private int[] functionParser(int[] lineList, int lineParser, int lineTerminator) {
         SymbolTableHandler.getInstance().getSymbolValue().put(SymbolTableHandler.TEMP1,Integer.parseInt(String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(SymbolTableHandler.TEMP1)))+1);

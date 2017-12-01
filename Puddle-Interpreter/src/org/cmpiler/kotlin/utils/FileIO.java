@@ -1,6 +1,6 @@
 package org.cmpiler.kotlin.utils;
 
-import org.cmpiler.kotlin.interpreter.console.Console;
+import org.cmpiler.kotlin.utils.console.Console;
 
 import java.io.*;
 import java.nio.charset.Charset;

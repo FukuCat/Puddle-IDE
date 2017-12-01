@@ -1,12 +1,12 @@
-package org.kon.jgame.model.utils;
+package org.kon.jgame.model.utils.list;
 
 import java.util.LinkedList;
 
-public class SimpleStack<T> {
+public class Stack<T> {
 	private LinkedList<T> stack;
 	private int size;
 
-	public SimpleStack(){
+	public Stack(){
 		setStack(new LinkedList<T>());
 		size = 0;
 	}
@@ -30,6 +30,14 @@ public class SimpleStack<T> {
 			size--;
 
 		return result;
+	}
+
+	public void reverse(){
+		Stack<T> temp = new Stack<>();
+		while(!stack.isEmpty()){
+			temp.push(pop());
+		}
+		setStack(temp.getStack());
 	}
 		
 	public T peek(){

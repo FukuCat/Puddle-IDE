@@ -11,8 +11,9 @@
  */
 
 parser grammar KotlinParser;
-
-options { tokenVocab = KotlinLexer; }
+options {
+  tokenVocab = KotlinLexer;
+}
 
 @header {
 import org.antlr.symtab.*;
@@ -20,15 +21,7 @@ import org.antlr.v4.runtime.misc.Utils;
 }
 
 kotlinFile returns [org.antlr.symtab.Scope scope]
-    : NL* fileAnnotation? packageHeader importList topLevelObject* EOF
-    ;
-
-script returns [org.antlr.symtab.Scope scope]
-    : NL* fileAnnotation? packageHeader importList(expression semi?)* EOF
-    ;
-
-fileAnnotation
-    : (FILE COLON (LSQUARE unescapedAnnotation+ RSQUARE | unescapedAnnotation) semi?)+
+    : NL* packageHeader importList topLevelObject* EOF
     ;
 
 packageHeader
@@ -50,7 +43,6 @@ importAlias
 topLevelObject
     : (classDeclaration
     | functionDeclaration
-    | objectDeclaration
     | propertyDeclaration
     | typeAlias) semi?
     ;
@@ -100,8 +92,6 @@ classBody
 classMemberDeclaration
     : (classDeclaration
     | functionDeclaration
-    | objectDeclaration
-    | companionObject
     | propertyDeclaration
     | anonymousInitializer
     | secondaryConstructor
@@ -160,21 +150,6 @@ parameter
 functionBody
     : block
     | ASSIGNMENT NL* expression
-    ;
-
-objectDeclaration
-    : modifierList? OBJECT
-    NL* simpleIdentifier
-    (NL* primaryConstructor)?
-    (NL* COLON NL* delegationSpecifiers)?
-    (NL* classBody)?
-    ;
-
-companionObject
-    : modifierList? COMPANION NL* modifierList? OBJECT
-    (NL* simpleIdentifier)?
-    (NL* COLON NL* delegationSpecifiers)?
-    (NL* classBody)?
     ;
 
 propertyDeclaration
@@ -274,7 +249,7 @@ typeConstraint
     : annotations* simpleIdentifier NL* COLON NL* type
     ;
 
-block
+block returns [org.antlr.symtab.Scope scope]
     : LCURL NL* (statement semi)* (statement semi?)? NL* RCURL
     ;
 
@@ -368,7 +343,7 @@ postfixUnaryExpression
     | callableReference
     ;
 
-callExpression
+callExpression returns [org.antlr.symtab.Scope scope]
     : assignableExpression typeArguments? valueArguments? annotatedLambda*
     ;
 
@@ -574,15 +549,15 @@ loopExpression
     | doWhileExpression
     ;
 
-forExpression
+forExpression  returns [org.antlr.symtab.Scope scope]
     : FOR NL* LPAREN annotations* (variableDeclaration | multiVariableDeclaration) IN expression RPAREN NL* controlStructureBody?
     ;
 
-whileExpression
+whileExpression  returns [org.antlr.symtab.Scope scope]
     : WHILE NL* LPAREN expression RPAREN NL* controlStructureBody?
     ;
 
-doWhileExpression
+doWhileExpression  returns [org.antlr.symtab.Scope scope]
     : DO NL* controlStructureBody? NL* WHILE NL* LPAREN expression RPAREN
     ;
 
