@@ -8,7 +8,7 @@ public class KotlinParserErrorStrategy extends DefaultErrorStrategy {
 
     @Override
     public void recover(Parser recognizer, RecognitionException e) {
-        testFix(recognizer, e);
+        original(recognizer, e);
     }
 
     private void testFix(Parser recognizer, RecognitionException e) {
@@ -30,7 +30,7 @@ public class KotlinParserErrorStrategy extends DefaultErrorStrategy {
 
         // Verify we are where we expect to be
         int currentToken = tokenStream.LA(1);
-        if (currentToken == KotlinParser.EOF || currentToken == KotlinParser.WS || currentToken == KotlinParser.SEMICOLON) {
+        if (currentToken == KotlinParser.WS || currentToken == KotlinParser.SEMICOLON) {
             // Get the next possible tokens
             IntervalSet intervalSet = getErrorRecoverySet(recognizer);
 

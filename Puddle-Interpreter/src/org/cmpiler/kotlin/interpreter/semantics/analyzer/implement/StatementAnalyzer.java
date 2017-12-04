@@ -72,7 +72,7 @@ public class StatementAnalyzer extends AbstractAnalyzer {
             ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
             Type t = expressionEvaluator.evaluate((KotlinParser.DisjunctionContext) ctx.getChild(2));
             if (s == null)
-                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_VARIABLE, "", ctx.start.getLine());
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_VARIABLE, "",name.getText(), ctx.start.getLine());
             else if (t == null)
                 KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, name.getText() + " is expecting type: " + exprectedType, ctx.start.getLine());
             else if (!t.getName().equalsIgnoreCase(exprectedType)) {

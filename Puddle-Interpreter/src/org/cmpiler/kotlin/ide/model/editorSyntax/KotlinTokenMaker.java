@@ -68,14 +68,9 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
         tokenMap.put("class", Token.RESERVED_WORD);
         tokenMap.put("fun", Token.RESERVED_WORD);
 
-        tokenMap.put("(", Token.RESERVED_WORD_2);
-        tokenMap.put(")", Token.RESERVED_WORD_2);
-        tokenMap.put("{", Token.RESERVED_WORD_2);
-        tokenMap.put("}", Token.RESERVED_WORD_2);
 
 
         tokenMap.put("//", Token.COMMENT_EOL);
-
         return tokenMap;
     }
 

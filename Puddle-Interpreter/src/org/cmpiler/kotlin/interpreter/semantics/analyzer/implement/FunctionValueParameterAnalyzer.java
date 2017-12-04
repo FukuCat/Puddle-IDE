@@ -12,34 +12,37 @@ public class FunctionValueParameterAnalyzer extends AbstractAnalyzer {
     @Override
     public void enterBuildRule(ParserRuleContext context) {
         KotlinParser.FunctionValueParameterContext ctx = (KotlinParser.FunctionValueParameterContext) context;
-        String name = ctx.getChild(0).getChild(0).getText();
-        if(symtab.isSymbolDefinedInCurrentScope(name)) {
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE, "",name,ctx.start.getLine());
-        } else {
-            VariableSymbol v = null;
-            if(symtab.getCurrentScope() instanceof MethodSymbol) {
-                ParameterSymbol p = new ParameterSymbol(name);
-                p.setDefNode(ctx);
-                if (ctx.getChild(0).getChildCount() < 3)
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
-                else {
-                    ctx.symbol = p;
-                    Console.log(Console.DEV_CONSOLE, "Parameter added [" + p.getName() + "]");
+        if(ctx.getChild(0)!= null)
+            if(ctx.getChild(0).getChild(0)!= null) {
+                String name = ctx.getChild(0).getChild(0).getText();
+                if (symtab.isSymbolDefinedInCurrentScope(name)) {
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE, "", name, ctx.start.getLine());
+                } else {
+                    VariableSymbol v = null;
+                    if (symtab.getCurrentScope() instanceof MethodSymbol) {
+                        ParameterSymbol p = new ParameterSymbol(name);
+                        p.setDefNode(ctx);
+                        if (ctx.getChild(0).getChildCount() < 3)
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                        else {
+                            ctx.symbol = p;
+                            Console.log(Console.DEV_CONSOLE, "Parameter added [" + p.getName() + "]");
+                        }
+                        v = p;
+                    } else {
+                        FieldSymbol f = new FieldSymbol(name);
+                        f.setDefNode(ctx);
+                        if (ctx.getChild(0).getChildCount() < 3)
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                        else {
+                            ctx.symbol = f;
+                            Console.log(Console.DEV_CONSOLE, "Field added [" + f.getName() + "]");
+                        }
+                        v = f;
+                    }
+                    symtab.getCurrentScope().define(v);
                 }
-                v = p;
-            } else {
-                FieldSymbol f = new FieldSymbol(name);
-                f.setDefNode(ctx);
-                if (ctx.getChild(0).getChildCount() < 3)
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
-                else {
-                    ctx.symbol = f;
-                    Console.log(Console.DEV_CONSOLE, "Field added [" + f.getName() + "]");
-                }
-                v = f;
             }
-            symtab.getCurrentScope().define(v);
-        }
     }
 
     @Override

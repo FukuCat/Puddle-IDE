@@ -29,14 +29,16 @@ public class Console {
     public static void log(int outputType, Object text){
         switch (outputType){
             case USER_CONSOLE:
-                getInstance().logs.enqueue(new LogItem(LogItem.TYPE_CONSOLE, text + ""));
-            case DEV_CONSOLE:
+                //getInstance().logs.enqueue(new LogItem(LogItem.TYPE_CONSOLE, text + ""));
                 System.out.println(text);
+            case DEV_CONSOLE:
+                //System.out.println(text);
                 break;
             case USER_ERROR:
-                getInstance().logs.enqueue(new LogItem(LogItem.TYPE_ERROR, text + ""));
-            case DEV_ERROR:
+                //getInstance().logs.enqueue(new LogItem(LogItem.TYPE_ERROR, text + ""));
                 System.err.println(text);
+            case DEV_ERROR:
+                //System.err.println(text);
                 break;
         }
     }

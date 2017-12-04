@@ -19,44 +19,47 @@ public class FunctionDeclarationAnalyzer extends AbstractAnalyzer {
     public void enterBuildRule(ParserRuleContext context) {
         KotlinParser.FunctionDeclarationContext ctx = (KotlinParser.FunctionDeclarationContext) context;
         //String name = symtab.getCurrentScope().toQualifierString(".")+"."+ FunctionSignatureGenerator.getInstance().toSignature(ctx);
-        String name = FunctionSignatureGenerator.getInstance().toSignature(ctx);
+        if(ctx.identifier() == null){
 
-        if(symtab.isSymbolDefinedInCurrentScope(name) && !(ctx.parent instanceof KotlinParser.ClassMemberDeclarationContext)) {
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_FUNCTION, "",name,ctx.start.getLine());
-            LocalScope l = new LocalScope(symtab.getCurrentScope());
-            ctx.scope = l;
-            symtab.pushScope(l);
         } else {
-            FunctionSymbol f = null;
-            if(ctx.parent instanceof KotlinParser.ClassMemberDeclarationContext){
-                // found first method
-                ClassSymbol c = (ClassSymbol) symtab.getCurrentScope();
-                if(!symtab.isSymbolDefinedInCurrentScope(name)){
-                    MethodSymbol m = new MethodSymbol(name);
-                    m.setEnclosingScope(symtab.getCurrentScope());
-                    m.setDefNode(ctx);
-                    c.setSlotNumber(m);
-                    symtab.getCurrentScope().define(m);
-                    f = m;
-                    Console.log(Console.DEV_CONSOLE, "Method defined ["+f.getName()+"]");
+            String name = FunctionSignatureGenerator.getInstance().toSignature(ctx);
+
+            if (symtab.isSymbolDefinedInCurrentScope(name) && !(ctx.parent instanceof KotlinParser.ClassMemberDeclarationContext)) {
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_FUNCTION, "", name, ctx.start.getLine());
+                LocalScope l = new LocalScope(symtab.getCurrentScope());
+                ctx.scope = l;
+                symtab.pushScope(l);
+            } else {
+                FunctionSymbol f = null;
+                if (ctx.parent instanceof KotlinParser.ClassMemberDeclarationContext) {
+                    // found first method
+                    ClassSymbol c = (ClassSymbol) symtab.getCurrentScope();
+                    if (!symtab.isSymbolDefinedInCurrentScope(name)) {
+                        MethodSymbol m = new MethodSymbol(name);
+                        m.setEnclosingScope(symtab.getCurrentScope());
+                        m.setDefNode(ctx);
+                        c.setSlotNumber(m);
+                        symtab.getCurrentScope().define(m);
+                        f = m;
+                        Console.log(Console.DEV_CONSOLE, "Method defined [" + f.getName() + "]");
+                    } else {
+                        KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_FUNCTION, "", name, ctx.start.getLine());
+                    }
                 } else {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_FUNCTION, "",name,ctx.start.getLine());
+                    f = new FunctionSymbol(name);
+                    f.setEnclosingScope(symtab.getCurrentScope());
+                    f.setDefNode(ctx);
+                    symtab.getCurrentScope().define(f);
+                    Console.log(Console.DEV_CONSOLE, "Function defined [" + f.getName() + "]");
                 }
-            }
-            else {
-                f = new FunctionSymbol(name);
-                f.setEnclosingScope(symtab.getCurrentScope());
-                f.setDefNode(ctx);
-                symtab.getCurrentScope().define(f);
-                Console.log(Console.DEV_CONSOLE, "Function defined ["+f.getName()+"]");
-            }
-            ctx.scope = f;
-            symtab.pushScope(f);
-            if(ctx.getChild(1).getText().equalsIgnoreCase("main")){
-                if(SymbolTableHandler.getInstance().getMainScope() == null)
-                    SymbolTableHandler.getInstance().setMainScope(f);
-                else
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_MAIN, "",ctx.start.getLine());
+                ctx.scope = f;
+                symtab.pushScope(f);
+                if (ctx.getChild(1).getText().equalsIgnoreCase("main")) {
+                    if (SymbolTableHandler.getInstance().getMainScope() == null)
+                        SymbolTableHandler.getInstance().setMainScope(f);
+                    else
+                        KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_MAIN, "", ctx.start.getLine());
+                }
             }
         }
     }
@@ -79,7 +82,8 @@ public class FunctionDeclarationAnalyzer extends AbstractAnalyzer {
                 else
                     type = "void";
                 f.setType(symtab.getDefinedType(type));
-                EditorController.getInstance().addAutoCompleteionFunction(ctx.identifier().getText(), f.getName()+":"+type);
+                if(ctx.identifier() != null)
+                    EditorController.getInstance().addAutoCompleteionFunction(ctx.identifier().getText(), f.getName()+":"+type);
             }
 
         }

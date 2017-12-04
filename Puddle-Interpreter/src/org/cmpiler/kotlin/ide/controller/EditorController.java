@@ -1,5 +1,6 @@
 package org.cmpiler.kotlin.ide.controller;
 
+import org.cmpiler.kotlin.ide.model.editorSyntax.KotlinFoldMaker;
 import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -32,7 +33,7 @@ public class EditorController {
         editorTextArea = new RSyntaxTextArea();
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         atmf.putMapping("text/kotlin", "org.cmpiler.kotlin.ide.model.editorSyntax.KotlinTokenMaker");
-        FoldParserManager.get().addFoldParserMapping("text/kotlin", new CurlyFoldParser(true, false));
+        FoldParserManager.get().addFoldParserMapping("text/kotlin", new KotlinFoldMaker());
         editorTextArea.setSyntaxEditingStyle("text/kotlin");
         editorTextArea.setCodeFoldingEnabled(true);
         editorTextArea.setEditable(true);
@@ -41,7 +42,10 @@ public class EditorController {
 
         editorScrollArea = new RTextScrollPane(editorTextArea);
         editorScrollArea.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+        InterpreterController.getInstance().startAutoBuild();
     }
+
+    public String getCode(){return editorTextArea.getText();}
 
     public static EditorController getInstance(){return instance == null? (instance = new EditorController()): instance;}
 
