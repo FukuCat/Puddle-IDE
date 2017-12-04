@@ -16,7 +16,7 @@ package org.cmpiler.kotlin;
 // parser added reserved keywords rule to "type" rule
 
 import org.cmpiler.kotlin.ide.view.window.*;
-import org.cmpiler.kotlin.interpreter.Interpreter.Interpreter;
+import org.cmpiler.kotlin.interpreter.Interpreter;
 import org.cmpiler.kotlin.utils.config.GlobalConfig;
 
 import javax.swing.JFrame;

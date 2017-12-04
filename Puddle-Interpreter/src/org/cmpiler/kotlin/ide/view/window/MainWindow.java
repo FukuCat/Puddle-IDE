@@ -2,6 +2,10 @@ package org.cmpiler.kotlin.ide.view.window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import org.cmpiler.kotlin.ide.controller.InterpreterController;
 import org.cmpiler.kotlin.ide.view.panel.ConsolePanel;
 import org.cmpiler.kotlin.ide.view.panel.TextEditorPanel;
 import org.cmpiler.kotlin.ide.view.panel.ToolBarPanel;
@@ -29,6 +33,15 @@ public class MainWindow extends JFrame{
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) (dimension.getWidth() / 2) - w/2;
         int y = (int) (dimension.getHeight() / 2) - h/2;
+
+        addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent e){
+                System.out.println("Closed");
+                InterpreterController.getInstance().setRunning(false);
+                e.getWindow().dispose();
+            }
+        });
 
         this.setLocation(x, y);
 

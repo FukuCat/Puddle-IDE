@@ -55,9 +55,16 @@ public class FunctionSignatureGenerator {
 
     public String toSignature(KotlinParser.FunctionDeclarationContext ctx){
         StringBuilder sb = new StringBuilder();
-        sb.append(ctx.getChild(1).getText());
+        sb.append(ctx.identifier().getText());
         sb.append('(');
-        sb.append(extractParameters(ctx));
+        if(ctx.getChild(0)!= null){
+            boolean isValid = true;
+            for(int i = 0; i < ctx.getChild(0).getChildCount(); i++)
+                if(ctx.getChild(0).getChild(i) == null)
+                    isValid = false;
+            if(isValid)
+                sb.append(extractParameters(ctx));
+        }
         sb.append(')');
         return sb.toString();
     }
@@ -81,6 +88,7 @@ public class FunctionSignatureGenerator {
         }
 
         @Override public void enterFunctionValueParameter(KotlinParser.FunctionValueParameterContext ctx) {
+            if(ctx.getChild(0) != null)
             if (ctx.getChild(0).getChildCount() >= 3){
                 if(first){
                     first = false;
