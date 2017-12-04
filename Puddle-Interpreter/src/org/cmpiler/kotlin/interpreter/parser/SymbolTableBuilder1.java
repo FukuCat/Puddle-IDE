@@ -7,7 +7,7 @@ package org.cmpiler.kotlin.interpreter.parser;
 
 /**
  *
- * @author msi
+ * @author jeff
  */
 
 import java.util.*;
@@ -21,9 +21,7 @@ import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.antlr.KotlinParserBaseListener;
 
 public class SymbolTableBuilder1 extends KotlinParserBaseListener {
-
-    private SymbolTableHandler symtab = SymbolTableHandler.getInstance();
-
+    
     private boolean end = false, functionCall = false, executeFunctionAgain = false;
     private HashMap <String,String> funVariables;
     private HashMap <String, String[]> arrayValues;
@@ -33,8 +31,9 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         String name, input, currentfunction = "", carryOnFormula = "", previousline = "";
         ArrayList<String> functions = new ArrayList<>();
         ArrayList<Integer> functionLine = new ArrayList<>();
+        ArrayList<String> toDoFunctionLines = new ArrayList<>();
         String[] myArr = null;
-        boolean match = false, firstfunrun = false, mainRun = true, firstStoreMainReturn =true;
+        boolean match = false, firstfunrun = false, mainRun = true, firstStoreMainReturn =true, isReturnArray = false, entered = false;
         int i = 0, returnline = 0, tempLine = 1;
         int closeBrace = 0;
         String returnVariable = "", returnValue = "";
@@ -66,9 +65,6 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                 if(executeFunctionAgain){
                                     myArr[j] = previousline;
                                 }
-                                /*if(!funVariables.isEmpty()&&!executeFunctionAgain){
-                                    funVariables.clear();
-                                }*/
                                 if(myArr[j].contains("=")){
                                     returnvalue = myArr[j].split("=");
                                     returnVariable = returnvalue[0].replaceAll("\\s+", "");
@@ -101,11 +97,14 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     tempCon[l] = tempCon[l].replaceAll("\\s+", "");
                                     tempCon[l] = tempCon[l].replaceAll("\\;", "");
                                     if(Character.isAlphabetic(tempCon[l].charAt(0)) || tempCon[l].charAt(0) == '_'){
-                                        if(executeFunctionAgain && funVariables.containsKey(tempCon[l])){
+                                        if(arrayValues.containsKey(tempCon[l])){
+                                            continue;
+                                        }
+                                        else if(executeFunctionAgain && funVariables.containsKey(tempCon[l])){
                                             tempCon[l] = funVariables.get(tempCon[l]);
-                                         }
+                                        }
                                         else{
-                                            tempCon[l] = String.valueOf(symtab.getSymbolValue().get(tempCon[l]));
+                                            tempCon[l] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(tempCon[l]));
                                         }
                                     }
                                 }
@@ -133,7 +132,13 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     tempVarCon3[0] = tempVarCon2[0];
                                 }
                                 for(int l=0; l<tempCon.length; l++){
-                                    funVariables.put(tempVarCon3[l], tempCon[l]);
+                                    if(tempVarCon3[l].contains("Array")){
+                                        tempVarCon3[l] = tempVarCon3[l].replaceAll("Array","");
+                                        arrayValues.put(tempVarCon3[l], arrayValues.get(tempCon[l]));
+                                    }
+                                    else{
+                                        funVariables.put(tempVarCon3[l], tempCon[l]);
+                                    }
                                 }
                                 functionCall = true;
                                 firstfunrun = true; 
@@ -146,10 +151,19 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             name = ctx.getChild(i).getText();
                             myArr = name.split("[\\r\\n]+");
                             firstfunrun = true;
-                            returnValue = mathEquation(carryOnFormula+""+returnValue);
-                            symtab.getSymbolValue().put(returnVariable, returnValue);
+                            if(carryOnFormula.contains("+")||carryOnFormula.contains("-")||carryOnFormula.contains("*")||carryOnFormula.contains("/")){
+                                returnValue = mathEquation(carryOnFormula+""+returnValue);
+                                SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
+                            }
+                            else if(isReturnArray){
+                                arrayValues.put(returnVariable, arrayValues.get(returnValue));
+                            }
+                            else{
+                                SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
+                            }
                             carryOnFormula = "";
                             firstStoreMainReturn = true;
+                            isReturnArray = false;
                         }
                         else if(j==myArr.length-1 && functionCall == false){
                             mainRun = false;
@@ -188,7 +202,6 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     ifblock = ifblock.concat(myArr[j]+"\n");
                                     j++;
                                 }
-                                //System.out.println("ifblock: "+ifblock);
                                 j--;
                                 String returnStatement = ifLoop(ifblock);
                                 if(returnStatement.contains("return")){
@@ -209,7 +222,6 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     }
                                     if(!executeFunctionAgain){
                                         j = myArr.length-2;
-                                        
                                     }
                                 }
                                 ifblock = "";
@@ -263,7 +275,14 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     executeFunctionAgain = true;
                                 }
                                 else if(Character.isAlphabetic(myArr[j].charAt(0)) || myArr[j].charAt(0) == '_'){
-                                    returnValue = funVariables.get(myArr[j]);
+                                    if(arrayValues.containsKey(myArr[j])){
+                                        isReturnArray = true;
+                                        returnValue = myArr[j];
+                                        System.out.println("HERE: "+returnValue);
+                                    }
+                                    else{
+                                        returnValue = funVariables.get(myArr[j]);
+                                    }
                                 }
                                 else if(myArr[j].contains("+")||myArr[j].contains("-")||myArr[j].contains("*")||myArr[j].contains("/")){
                                     returnValue = mathEquation(myArr[j]);
@@ -272,8 +291,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     returnValue = myArr[j];
                                 }
                                 if(!executeFunctionAgain){
-                                    j=myArr.length-1;
-                                    functionCall = false;
+                                    j=myArr.length-2;
                                 }
                             }
                             else if(myArr[j].contains("=")){
@@ -297,10 +315,9 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                         }
                         else{
                             firstfunrun = false;
-                        }
+                        }                        
                     }
-                }
-                
+                }               
                 i++;
             }
             end = true;
@@ -1208,40 +1225,20 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
     @Override public void exitFunctionDeclaration(KotlinParser.FunctionDeclarationContext ctx) {
     }
 
-    /* inherited class
-    * */
     @Override public void enterDelegationSpecifier(KotlinParser.DelegationSpecifierContext ctx) {
     }
 
     @Override public void exitDelegationSpecifier(KotlinParser.DelegationSpecifierContext ctx) { }
 
-    /* Variable Declaration
-    * */
     @Override public void enterVariableDeclaration(KotlinParser.VariableDeclarationContext ctx) {
     }
     @Override public void enterFunctionValueParameter(KotlinParser.FunctionValueParameterContext ctx) {
     }
-    /*
-    @Override public void enterBlock(KotlinParser.BlockContext ctx) {
-        LocalScope l = new LocalScope(getCurrentScope());
-        pushScope(l);
-    }
 
-    @Override public void exitBlock(KotlinParser.BlockContext ctx) {
-        popScope();
-    }
-    */
     @Override public void enterLoopExpression(KotlinParser.LoopExpressionContext ctx) {
     }
 
     @Override public void exitLoopExpression(KotlinParser.LoopExpressionContext ctx) {
     }
-
-    private Scope getCurrentScope(){return symtab.getCurrentScope();}
-
-    private Type getPredefienedType(String name){ return  symtab.getDefinedType(name); }
-
-    private Symbol getPredefinedSymbol(String name){ return symtab.getPredefinedSymbol(name);}
-
 
 }
