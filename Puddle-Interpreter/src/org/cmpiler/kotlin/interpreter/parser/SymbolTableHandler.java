@@ -10,6 +10,11 @@ public class SymbolTableHandler extends SymbolTable {
     public static final int VISIBILITY_PUBLIC = 1;
     public static final int VISIBILITY_PRIVATE = 2;
     public static final int VISIBILITY_PROTECTED = 3;
+    public static String TEMP1 = "divideCounter";
+    public static String TEMP2 = "conquerCounter";
+    public static String TEMP3 = "sortedArr";
+    public static String TEMP4 = "mergeSortProper";
+    public static String TEMP5 = "merge";
 
     private static SymbolTableHandler instance;
 

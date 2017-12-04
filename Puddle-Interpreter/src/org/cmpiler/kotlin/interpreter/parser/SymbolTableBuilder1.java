@@ -7,7 +7,7 @@ package org.cmpiler.kotlin.interpreter.parser;
 
 /**
  *
- * @author msi
+ * @author jeff
  */
 
 import java.util.*;
@@ -33,8 +33,9 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
         String name, input, currentfunction = "", carryOnFormula = "", previousline = "";
         ArrayList<String> functions = new ArrayList<>();
         ArrayList<Integer> functionLine = new ArrayList<>();
+        ArrayList<String> toDoFunctionLines = new ArrayList<>();
         String[] myArr = null;
-        boolean match = false, firstfunrun = false, mainRun = true, firstStoreMainReturn =true;
+        boolean match = false, firstfunrun = false, mainRun = true, firstStoreMainReturn =true, isReturnArray = false, entered = false;
         int i = 0, returnline = 0, tempLine = 1;
         int closeBrace = 0;
         String returnVariable = "", returnValue = "";
@@ -61,7 +62,102 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                     while(j<myArr.length && mainRun == true){
                         String[] tempCon = null, returnvalue = null, values = null;
                         for(int k=0; k<functions.size(); k++){
-                            if(myArr[j].contains(functions.get(k)+"(")){
+                            /*if(j==-1)
+                                j=0;*/
+                            if(myArr[j].contains(SymbolTableHandler.TEMP5)&&!entered){
+                                String execute = "";
+                                for(int l=0; l<functions.size(); l++){
+                                    if(SymbolTableHandler.TEMP4.equals(functions.get(l))){
+                                       execute = ctx.getChild(functionLine.get(l)).getText(); 
+                                    }
+                                }
+                                String[] tempp;
+                                tempp = execute.split("[\\r\\n]+");
+                                for(int l=0; l<tempp.length; l++){
+                                    if(tempp[l].contains("print")){
+                                        print(tempp[l]);
+                                    }
+                                    else if(tempp[l].contains("scan")){
+                                        scan(tempp[1]);
+                                    }
+                                }
+                                execute = "";
+                                for(int l=0; l<functions.size(); l++){
+                                    if(SymbolTableHandler.TEMP5.equals(functions.get(l))){
+                                       execute = ctx.getChild(functionLine.get(l)).getText(); 
+                                    }
+                                }
+                                tempp = execute.split("[\\r\\n]+");
+                                for(int l=0; l<tempp.length; l++){
+                                    if(tempp[l].contains("print")){
+                                        print(tempp[l]);
+                                    }
+                                    else if(tempp[l].contains("scan")){
+                                        scan(tempp[1]);
+                                    }
+                                }
+                                entered = true;
+                                if(myArr[j].contains("=")){
+                                    returnvalue = myArr[j].split("=");
+                                    returnVariable = returnvalue[0].replaceAll("\\s+", "");
+                                    returnVariable = returnVariable.replaceAll("return", "");
+                                }
+                                if(myArr[j].contains("="))
+                                    values = returnvalue[1].split("\\(");
+                                else
+                                    values = myArr[j].split("\\(");
+                                if(!functionCall){
+                                    values[0] = values[0].replaceAll(functions.get(k), "");
+                                    values[0] = values[0].replaceAll("\\s+", "");
+                                    carryOnFormula = carryOnFormula.concat(values[0]);
+                                }
+                                values[1] = values[1].replaceAll("\\)", "");
+                                tempCon = null;
+                                if(values[1].contains(",")){
+                                    tempCon = values[1].split(",");
+                                }
+                                else if(values[1].contains("+")||values[1].contains("-")||values[1].contains("*")||values[1].contains("/")){
+                                    tempCon = new String[1];
+                                    tempCon[0] = mathEquation(values[1]);
+                                }
+                                else{
+                                    tempCon = new String[1];
+                                    tempCon[0] = values[1];
+                                }
+                                for(int l=0; l<tempCon.length; l++){
+                                    tempCon[l] = tempCon[l].replaceAll("\\)", "");
+                                    tempCon[l] = tempCon[l].replaceAll("\\s+", "");
+                                    tempCon[l] = tempCon[l].replaceAll("\\;", "");
+                                    if(Character.isAlphabetic(tempCon[l].charAt(0)) || tempCon[l].charAt(0) == '_'){
+                                        if(arrayValues.containsKey(tempCon[l])){
+                                            continue;
+                                        }
+                                        else if(executeFunctionAgain && funVariables.containsKey(tempCon[l])){
+                                            tempCon[l] = funVariables.get(tempCon[l]);
+                                        }
+                                        else{
+                                            tempCon[l] = String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(tempCon[l]));
+                                        }
+                                    }
+                                }
+                                String[] tempContainer = arrayValues.get(tempCon[0]);
+                                int[] lineContainer = new int[tempContainer.length];
+                                for(int r=0; r<tempContainer.length; r++){
+                                    lineContainer[r] = Integer.parseInt(tempContainer[r]);
+                                }
+                                int[] lineList = functionParser(lineContainer,Integer.parseInt(tempCon[1]),Integer.parseInt(tempCon[2]));
+                                String[] temp = new String[lineList.length];
+                                for(int s=0; s<lineList.length; s++){
+                                    temp[s] = Integer.toString(lineList[s]);
+                                }
+                                arrayValues.put(SymbolTableHandler.TEMP3, temp);
+                            }
+                            else if(myArr[j].contains(functions.get(k)+"(")){
+                                /*if(functionCall){
+                                    functionNameQueue.add(functions.get(k));
+                                    functionLineQueue.add(j-1);
+                                }*/
+                                
                                 currentfunction = functions.get(k);
                                 if(executeFunctionAgain){
                                     myArr[j] = previousline;
@@ -101,9 +197,12 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     tempCon[l] = tempCon[l].replaceAll("\\s+", "");
                                     tempCon[l] = tempCon[l].replaceAll("\\;", "");
                                     if(Character.isAlphabetic(tempCon[l].charAt(0)) || tempCon[l].charAt(0) == '_'){
-                                        if(executeFunctionAgain && funVariables.containsKey(tempCon[l])){
+                                        if(arrayValues.containsKey(tempCon[l])){
+                                            continue;
+                                        }
+                                        else if(executeFunctionAgain && funVariables.containsKey(tempCon[l])){
                                             tempCon[l] = funVariables.get(tempCon[l]);
-                                         }
+                                        }
                                         else{
                                             tempCon[l] = String.valueOf(symtab.getSymbolValue().get(tempCon[l]));
                                         }
@@ -133,7 +232,13 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     tempVarCon3[0] = tempVarCon2[0];
                                 }
                                 for(int l=0; l<tempCon.length; l++){
-                                    funVariables.put(tempVarCon3[l], tempCon[l]);
+                                    if(tempVarCon3[l].contains("Array")){
+                                        tempVarCon3[l] = tempVarCon3[l].replaceAll("Array","");
+                                        arrayValues.put(tempVarCon3[l], arrayValues.get(tempCon[l]));
+                                    }
+                                    else{
+                                        funVariables.put(tempVarCon3[l], tempCon[l]);
+                                    }
                                 }
                                 functionCall = true;
                                 firstfunrun = true; 
@@ -141,15 +246,39 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                             }
                         }
                         if(j==myArr.length-1 && functionCall == true){
-                            functionCall = false;
-                            j = tempLine;
-                            name = ctx.getChild(i).getText();
-                            myArr = name.split("[\\r\\n]+");
+                            /*
+                            if(!functionNameQueue.isEmpty()){
+                                j = functionLineQueue.remove(functionLineQueue.size()-1);
+                                for(int k=0; k<functions.size(); k++){
+                                    if(functionNameQueue.get(functionNameQueue.size()-1).equals(functions.get(k))){
+                                        name = ctx.getChild(functionLine.get(k)).getText();
+                                        myArr = name.split("[\\r\\n]+");
+                                    }
+                                }
+                                functionNameQueue.remove(functionNameQueue.size()-1);
+                            }
+                            else{*/
+                                functionCall = false;
+                                j = tempLine;
+                                name = ctx.getChild(i).getText();
+                                myArr = name.split("[\\r\\n]+");
+                            //}
                             firstfunrun = true;
                             returnValue = mathEquation(carryOnFormula+""+returnValue);
                             symtab.getSymbolValue().put(returnVariable, returnValue);
+                            if(carryOnFormula.contains("+")||carryOnFormula.contains("-")||carryOnFormula.contains("*")||carryOnFormula.contains("/")){
+                                returnValue = mathEquation(carryOnFormula+""+returnValue);
+                                SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
+                            }
+                            else if(isReturnArray){
+                                arrayValues.put(returnVariable, arrayValues.get(returnValue));
+                            }
+                            else{
+                                SymbolTableHandler.getInstance().getSymbolValue().put(returnVariable, returnValue);
+                            }
                             carryOnFormula = "";
                             firstStoreMainReturn = true;
+                            isReturnArray = false;
                         }
                         else if(j==myArr.length-1 && functionCall == false){
                             mainRun = false;
@@ -263,7 +392,14 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     executeFunctionAgain = true;
                                 }
                                 else if(Character.isAlphabetic(myArr[j].charAt(0)) || myArr[j].charAt(0) == '_'){
-                                    returnValue = funVariables.get(myArr[j]);
+                                    if(arrayValues.containsKey(myArr[j])){
+                                        isReturnArray = true;
+                                        returnValue = myArr[j];
+                                        System.out.println("HERE: "+returnValue);
+                                    }
+                                    else{
+                                        returnValue = funVariables.get(myArr[j]);
+                                    }
                                 }
                                 else if(myArr[j].contains("+")||myArr[j].contains("-")||myArr[j].contains("*")||myArr[j].contains("/")){
                                     returnValue = mathEquation(myArr[j]);
@@ -272,8 +408,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                                     returnValue = myArr[j];
                                 }
                                 if(!executeFunctionAgain){
-                                    j=myArr.length-1;
-                                    functionCall = false;
+                                    j=myArr.length-2;
                                 }
                             }
                             else if(myArr[j].contains("=")){
@@ -298,6 +433,7 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
                         else{
                             firstfunrun = false;
                         }
+                        
                     }
                 }
                 
@@ -1243,5 +1379,54 @@ public class SymbolTableBuilder1 extends KotlinParserBaseListener {
 
     private Symbol getPredefinedSymbol(String name){ return symtab.getPredefinedSymbol(name);}
 
+    private int[] functionParser(int[] lineList, int lineParser, int lineTerminator) {
+        SymbolTableHandler.getInstance().getSymbolValue().put(SymbolTableHandler.TEMP1,Integer.parseInt(String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(SymbolTableHandler.TEMP1)))+1);
+        if(lineParser < lineTerminator) {
+                int middle = (lineParser + lineTerminator) / 2;
+                functionParser(lineList, lineParser, middle);
+                functionParser(lineList, middle + 1, lineTerminator);
+                functionLexer(lineList, lineParser, middle, lineTerminator);
+        }
+        return lineList;
+    }
+	
+    private void functionLexer(int[] lineList, int lineParser, int line, int lineTerminator) {
+        int leftSize = line - lineParser + 1;
+        int rightSize = lineTerminator - line;
+
+        //initialize left and right sub-array such that the corresponding elements from lineList are copied to its left/right partition
+        int[] leftArray = new int[leftSize + 1];
+        int[] rightArray = new int[rightSize + 1];
+
+        for(int i = 0; i < leftSize; i++) {
+                leftArray[i] = lineList[lineParser + i];
+        }
+
+        for(int i = 0; i < rightSize; i++) {
+                rightArray[i] = lineList[line + i + 1];
+        }
+
+        //add a sentinel value so that any compares with this will guarantee that the the list is already empty
+        int sentinel = Integer.MAX_VALUE;
+        leftArray[leftSize] = sentinel;
+        rightArray[rightSize] = sentinel;
+
+        //combine step
+        int leftIndex = 0;
+        int rightIndex = 0;
+        for(int i = lineParser; i <= lineTerminator; i++) {
+                //Debug.log(TAG, "Left: " +leftArray[leftIndex]+ " Right: " +rightArray[rightIndex]);
+                if(leftArray[leftIndex] <= rightArray[rightIndex]) {
+                        lineList[i] = leftArray[leftIndex];
+                        leftIndex++;
+                }
+                else {
+                        lineList[i] = rightArray[rightIndex];
+                        rightIndex++;
+                }
+        }
+
+        SymbolTableHandler.getInstance().getSymbolValue().put(SymbolTableHandler.TEMP2,Integer.parseInt(String.valueOf(SymbolTableHandler.getInstance().getSymbolValue().get(SymbolTableHandler.TEMP2)))+1);
+    }
 
 }
