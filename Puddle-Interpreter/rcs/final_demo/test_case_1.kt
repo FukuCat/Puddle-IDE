@@ -1,6 +1,6 @@
 fun main(args : StringArray) {
 	val firstname: String = ""
-	val midname: String = ""
+	val middlename: String = ""
 	val lastname: String = ""
 
 	scan("First Name: " +firstname)

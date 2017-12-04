@@ -8,8 +8,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.antlr.KotlinParserBaseListener;
-import org.cmpiler.kotlin.interpreter.Interpreter.parser.SymbolTableHandler;
-import org.cmpiler.kotlin.interpreter.Interpreter.semantics.KotlinCodeValidator;
+import org.cmpiler.kotlin.interpreter.parser.SymbolTableHandler;
+import org.cmpiler.kotlin.interpreter.semantics.KotlinCodeValidator;
 import org.kon.jgame.model.utils.list.Stack;
 
 import java.util.ArrayList;
@@ -397,21 +397,43 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
             } // current class
         }
 
+        public void enterCallExpression(KotlinParser.CallExpressionContext ctx){
+            scopeStack.push(new TypeScope());
+        }
+
+        public void exitCallExpression(KotlinParser.CallExpressionContext ctx){
+            Type tempType = null;
+
+            ValueArgumentChecker argChecker = new ValueArgumentChecker();
+            ParseTreeWalker treeWalker = new ParseTreeWalker();
+            treeWalker.walk(argChecker, ctx.parent.parent);
+            String name = ctx.getChild(0).getText();
+            String signature = FunctionSignatureGenerator.getInstance().toSignatureFromTypeList(name, argChecker.getArgs());
+            FunctionSymbol f = (FunctionSymbol) symtab.getCurrentScope().resolve(signature);
+            if(f == null){
+                scopeStack.peek().getTypeStack().pop();
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION, "", ctx.getChild(0).getText(), ctx.start.getLine());
+            } else {
+                tempType = f.getType();
+                scopeStack.peek().getTypeStack().push(f.getType());
+            }
+
+
+            if(!scopeStack.isEmpty()){
+                TypeScope typeScope = scopeStack.pop();
+                while(!typeScope.getTypeStack().isEmpty()){
+                    typeScope.getTypeStack().pop();
+                }
+
+                scopeStack.peek().getTypeStack().push(tempType);
+
+            }
+        }
+
         @Override
         public void exitPrimaryExpression(KotlinParser.PrimaryExpressionContext ctx) {
             if (ctx.getChild(0) instanceof KotlinParser.SimpleIdentifierContext) {
-                if(ctx.parent.parent instanceof KotlinParser.CallExpressionContext){
-                    ValueArgumentChecker argChecker = new ValueArgumentChecker();
-                    ParseTreeWalker treeWalker = new ParseTreeWalker();
-                    treeWalker.walk(argChecker, ctx.parent.parent);
-                    String name = ctx.getChild(0).getText();
-                    String signature = FunctionSignatureGenerator.getInstance().toSignatureFromTypeList(name, argChecker.getArgs());
-                    FunctionSymbol f = (FunctionSymbol) symtab.getCurrentScope().resolve(signature);
-                    if(f == null){
-                        KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION, "", ctx.getChild(0).getText(), ctx.start.getLine());
-                    } else
-                        scopeStack.peek().getTypeStack().push(f.getType());
-                } else {
+                if(!(ctx.parent.parent instanceof KotlinParser.CallExpressionContext)) {
                     VariableSymbol v = (VariableSymbol)symtab.getCurrentScope().resolve(ctx.getChild(0).getText());
                     if(v != null){
                         scopeStack.peek().getTypeStack().push( v.getType());
@@ -420,22 +442,6 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
                 }
-                /*
-                if(ctx.getChild(1) instanceof )
-
-                ValueArgumentChecker argChecker = new ValueArgumentChecker();
-                ParseTreeWalker treeWalker = new ParseTreeWalker();
-                treeWalker.walk(argChecker, ctx);
-                String signature = FunctionSignatureGenerator.getInstance().toSignatureFromTypeList(ctx.getChild(0).getChild(0).getText(), argChecker.getArgs());
-                VariableSymbol v = (VariableSymbol)symtab.getCurrentScope().resolve(ctx.getChild(0).getText());
-                FunctionSymbol f
-                if(v != null){
-                    String name = v.getType().getName();
-                    //typeStack.push(name);
-                } else {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", ctx.getChild(0).getText(), ctx.start.getLine());
-                }
-                */
             }
         }
     }
