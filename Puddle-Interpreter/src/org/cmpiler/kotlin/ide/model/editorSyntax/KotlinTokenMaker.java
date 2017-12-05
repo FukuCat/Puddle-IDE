@@ -90,6 +90,8 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                 break;
             case Token.COMMENT_EOL:
                 break;
+            case Token.SEPARATOR:
+                break;
             case Token.COMMENT_MULTILINE:
                 break;
             default:
@@ -135,6 +137,12 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                         case ' ':
                         case '\t':
                             currentTokenType = Token.WHITESPACE;
+                            break;
+                        case '{':
+                        case '}':
+                        case '(':
+                        case ')':
+                            currentTokenType = Token.SEPARATOR;
                             break;
                         case '"':
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
@@ -184,6 +192,14 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                         case '\t':
                             break;   // Still whitespace.
 
+                        case '{':
+                        case '}':
+                        case '(':
+                        case ')':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.SEPARATOR;
+                            break;
                         case '"':
                             addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
@@ -241,7 +257,14 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.WHITESPACE;
                             break;
-
+                        case '{':
+                        case '}':
+                        case '(':
+                        case ')':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.SEPARATOR;
+                            break;
                         case '"':
                             addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
@@ -286,6 +309,14 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.WHITESPACE;
                             break;
+                        case '{':
+                        case '}':
+                        case '(':
+                        case ')':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.SEPARATOR;
+                            break;
 
                         case '"':
                             addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
@@ -326,9 +357,13 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
 
                     break;
 
+                case Token.SEPARATOR:
+                    addToken(text, currentTokenStart,i, Token.SEPARATOR, newStartOffset+currentTokenStart);
+                    currentTokenType = Token.NULL;
+                    break;
                 case Token.COMMENT_EOL:
                     i = end - 1;
-                    addToken(text, currentTokenStart,i, currentTokenType, newStartOffset+currentTokenStart);
+                    addToken(text, currentTokenStart,i, Token.COMMENT_EOL, newStartOffset+currentTokenStart);
                     // We need to set token type to null so at the bottom we don't add one more token.
                     currentTokenType = Token.NULL;
                     break;
@@ -379,7 +414,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
 
         }
 
-        // Return the first token in our linked list.
         return firstToken;
 
     }

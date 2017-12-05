@@ -113,12 +113,15 @@ public class EditorController {
     }
 
     public void highlightEditorLine(int start, int end){
+        int caret = editorTextArea.getCaretPosition();
         if(start <= end)
             for(int i = start; i <= end; i++)
                 highlightEditorLine(i);
+        editorTextArea.setCaretPosition(caret);
     }
 
     public void highlightEditorLine(int line){
+        int caret = editorTextArea.getCaretPosition();
         String[] lineString = getEditorTextArea().getText().split("\\r?\\n");
         int positionStart = 0;
         int positionEnd = 0;
@@ -139,6 +142,7 @@ public class EditorController {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+        editorTextArea.setCaretPosition(caret);
     }
 
     public RTextScrollPane getEditorScrollArea() {
