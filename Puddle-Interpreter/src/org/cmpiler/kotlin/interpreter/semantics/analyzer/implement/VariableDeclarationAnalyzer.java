@@ -19,7 +19,7 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
         KotlinParser.VariableDeclarationContext ctx = (KotlinParser.VariableDeclarationContext) context;
         String name = ctx.getChild(0).getText();
         if(symtab.isSymbolDefinedInCurrentScope(name)) {
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE, "",name,ctx.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE,ctx.start.getLine(),"",name,ctx.start.getLine());
         } else {
 
             // data type and name
@@ -29,7 +29,7 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
                 c.setSlotNumber(f);
                 f.setDefNode(ctx);
                 if (ctx.getChildCount() < 3) {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                 } else {
                     ctx.symbol = f;
                     Console.log(Console.DEV_CONSOLE, "Field added [" + name + "]");
@@ -42,7 +42,7 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
                 VariableSymbol v = new VariableSymbol(name);
                 v.setDefNode(ctx);
                 if (ctx.getChildCount() < 3) {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                 }else {
                     ctx.symbol = v;
                     Console.log(Console.DEV_CONSOLE, "Variable added [" + name + "]");
@@ -74,7 +74,7 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
                     v.setType(t);
                     EditorController.getInstance().addAutoCompleteionItem(v.getName());
                 } else {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                 }
             }
     }

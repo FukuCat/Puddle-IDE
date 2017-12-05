@@ -68,9 +68,12 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
         tokenMap.put("class", Token.RESERVED_WORD);
         tokenMap.put("fun", Token.RESERVED_WORD);
 
-
-
-        tokenMap.put("//", Token.COMMENT_EOL);
+/*
+        tokenMap.put("(", Token.RESERVED_WORD_2);
+        tokenMap.put(")", Token.RESERVED_WORD_2);
+        tokenMap.put("{", Token.RESERVED_WORD_2);
+        tokenMap.put("}", Token.RESERVED_WORD_2);
+        */
         return tokenMap;
     }
 
@@ -133,7 +136,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                         case '\t':
                             currentTokenType = Token.WHITESPACE;
                             break;
-
                         case '"':
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
@@ -245,7 +247,25 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
-
+                        case '/':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            if (i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '/':
+                                        currentTokenType = Token.COMMENT_EOL;
+                                        break;
+                                    case '*':
+                                        currentTokenType = Token.COMMENT_MULTILINE;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            } else {
+                                currentTokenType = Token.IDENTIFIER;
+                            }
+                            break;
                         default:
                             if (RSyntaxUtilities.isLetterOrDigit(c) || c=='/' || c=='_') {
                                 break;   // Still an identifier of some type.
@@ -272,7 +292,25 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
-
+                        case '/':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            if (i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '/':
+                                        currentTokenType = Token.COMMENT_EOL;
+                                        break;
+                                    case '*':
+                                        currentTokenType = Token.COMMENT_MULTILINE;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            } else {
+                                currentTokenType = Token.IDENTIFIER;
+                            }
+                            break;
                         default:
 
                             if (RSyntaxUtilities.isDigit(c)) {

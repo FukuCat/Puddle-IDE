@@ -51,7 +51,7 @@ public class StatementAnalyzer extends AbstractAnalyzer {
         Symbol s = symtab.getCurrentScope().resolve(name.getText());
 
         if(symtab.isSymbolConstant(s))
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.CONST_REASSIGNMENT, "", s.getName(),ctx.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.CONST_REASSIGNMENT,ctx.start.getLine(),"", s.getName(),ctx.start.getLine());
         else {
             String exprectedType = s instanceof VariableSymbol ? ((VariableSymbol) s).getType().getName()
                     : s instanceof FunctionSymbol ? ((FunctionSymbol) s).getType().getName() : "unknown";
@@ -72,11 +72,11 @@ public class StatementAnalyzer extends AbstractAnalyzer {
             ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
             Type t = expressionEvaluator.evaluate((KotlinParser.DisjunctionContext) ctx.getChild(2));
             if (s == null)
-                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_VARIABLE, "",name.getText(), ctx.start.getLine());
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_VARIABLE,ctx.start.getLine(),"",name.getText(), ctx.start.getLine());
             else if (t == null)
-                KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, name.getText() + " is expecting type: " + exprectedType, ctx.start.getLine());
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH,ctx.start.getLine(),name.getText() + " is expecting type: " + exprectedType, ctx.start.getLine());
             else if (!t.getName().equalsIgnoreCase(exprectedType)) {
-                KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, ctx.getChild(0).getText() + " is of type: " + exprectedType + " entered type: " + t.getName(), ctx.start.getLine());
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH,ctx.start.getLine(),ctx.getChild(0).getText() + " is of type: " + exprectedType + " entered type: " + t.getName(), ctx.start.getLine());
             }
         }
         //symtab.getSymbolDefinedInCurrentScope(ctx.getChild(0).getText());

@@ -16,7 +16,7 @@ public class ClassDeclarationAnalyzer extends AbstractAnalyzer {
 
         String name = ctx.simpleIdentifier().getText();
         if(symtab.isSymbolDefinedInCurrentScope(name)) {
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_CLASS, "",name,ctx.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_CLASS, ctx.start.getLine(),"",name,ctx.start.getLine());
             LocalScope l = new LocalScope(symtab.getCurrentScope());
             ctx.scope = l;
             symtab.pushScope(l);

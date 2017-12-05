@@ -68,7 +68,7 @@ public class InterpreterController {
         } else {
             if(!isExecuting()) {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                System.out.println("Building at: "+timestamp);
+                System.out.println("Building at: "+timestamp+"\n");
                 setBuilding(true);
                 semBuild.acquire(1);
                 EditorController.getInstance().clearHighlights();

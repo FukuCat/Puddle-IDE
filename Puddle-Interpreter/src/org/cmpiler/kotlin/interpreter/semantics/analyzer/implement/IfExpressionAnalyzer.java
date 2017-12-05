@@ -26,8 +26,8 @@ public class IfExpressionAnalyzer extends AbstractAnalyzer {
         KotlinParser.ExpressionContext exp = ctx.expression();
         Type t = expEval.evaluate(exp);
         if(t == null)
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, "", context.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH,ctx.start.getLine(),"", context.start.getLine());
         else if(!t.getName().equalsIgnoreCase("boolean"))
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, "", context.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH,ctx.start.getLine(),"", context.start.getLine());
     }
 }

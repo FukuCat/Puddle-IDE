@@ -65,6 +65,6 @@ public class JumpExpressionAnalyzer extends AbstractAnalyzer {
 
         }
         if(hasError)
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN, "", context.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN,context.start.getLine(),"", context.start.getLine());
     }
 }

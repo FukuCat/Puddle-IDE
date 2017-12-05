@@ -130,7 +130,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         if(t1.getName().equalsIgnoreCase("boolean") && t2.getName().equalsIgnoreCase("boolean"))
                             typeScope.getTypeStack().push(t1);
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
                     if(typeScope.getTypeStack().getSize() > 0) {
                         tempType = typeScope.getTypeStack().pop();
@@ -159,7 +159,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         if(t1.getName().equalsIgnoreCase("boolean") && t2.getName().equalsIgnoreCase("boolean"))
                             typeScope.getTypeStack().push(t1);
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
                     if(typeScope.getTypeStack().getSize() > 0) {
                         tempType = typeScope.getTypeStack().pop();
@@ -188,7 +188,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                                 || t1.getName().equalsIgnoreCase("char") && t2.getName().equalsIgnoreCase("char"))
                             typeScope.getTypeStack().push(symtab.getDefinedType("Boolean"));
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
 
                 if(typeScope.getTypeStack().getSize() > 0) {
@@ -216,7 +216,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                     if(mathable.contains(t1) && mathable.contains(t2))
                         typeScope.getTypeStack().push(symtab.getDefinedType("Boolean"));
                     else
-                        KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                        KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                 }
 
                 if(typeScope.getTypeStack().getSize() > 0) {
@@ -271,7 +271,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         else if(stringable.contains(t1) && stringable.contains(t2))
                             typeScope.getTypeStack().push(t1);
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
 
                 if(typeScope.getTypeStack().getSize() > 0) {
@@ -310,7 +310,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                             typeScope.getTypeStack().push(rankedType);
                         }
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
 
 
@@ -340,7 +340,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         if(mathable.contains(t1) && mathable.contains(t2))
                             typeScope.getTypeStack().push(t1);
                         else
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_CAST_MISMATCH,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
 
 
@@ -379,7 +379,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                             }
                         } else errorVariable = ctx.getText();
                         if(errorVariable!= null)
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", errorVariable, ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", errorVariable, ctx.start.getLine());
                         break;
                     case KotlinParser.NullLiteral:
                         scopeStack.peek().getTypeStack().push(symtab.getDefinedType("null"));
@@ -412,7 +412,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
             FunctionSymbol f = (FunctionSymbol) symtab.getCurrentScope().resolve(signature);
             if(f == null){
                 scopeStack.peek().getTypeStack().pop();
-                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
             } else {
                 tempType = f.getType();
                 scopeStack.peek().getTypeStack().push(f.getType());
@@ -439,7 +439,7 @@ public class ExpressionEvaluator extends KotlinParserBaseListener {
                         scopeStack.peek().getTypeStack().push( v.getType());
                     } else {
                         scopeStack.peek().getTypeStack().push( symtab.getDefinedType("null"));
-                        KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                        KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
                 }
             }

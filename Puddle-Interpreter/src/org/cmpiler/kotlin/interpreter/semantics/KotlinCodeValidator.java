@@ -3,6 +3,7 @@ package org.cmpiler.kotlin.interpreter.semantics;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.cmpiler.kotlin.ide.controller.EditorController;
 import org.cmpiler.kotlin.utils.ErrorDictionary;
 import org.cmpiler.kotlin.utils.console.Console;
 
@@ -33,7 +34,7 @@ public class KotlinCodeValidator implements ANTLRErrorListener {
         Token t = (Token) offendingSymbol;
         Console.log(Console.USER_ERROR, "Syntax error at line [" +line+ "]: Unexpected token [ "+t.getText()+" ]");
         isValid = false;
-
+        EditorController.getInstance().highlightEditorLine(line);
             /*
         if(!hasError && offendingSymbol instanceof Token) {
             Token t = (Token) offendingSymbol;
@@ -115,31 +116,19 @@ public class KotlinCodeValidator implements ANTLRErrorListener {
 
     }
 
-    public static void reportCustomError(int errorCode, String additionalMessage) {
-        String errorMessage = ErrorDictionary.getMessage(errorCode) + " " + additionalMessage;
-        Console.log(Console.USER_ERROR, errorMessage);
-
-        getInstance().isValid = false;
-    }
-
-    public static void reportCustomError(int errorCode, String additionalMessage, Object... parameters) {
-        String errorMessage = String.format(ErrorDictionary.getMessage(errorCode) + " " + additionalMessage, parameters);
-        Console.log(Console.USER_ERROR, errorMessage);
-
-        getInstance().isValid = false;
-    }
-
     public static void reportCustomError(int errorCode, int line, String additionalMessage) {
         String errorMessage = ErrorDictionary.getMessage(errorCode) + " " + additionalMessage;
         Console.log(Console.USER_ERROR, errorMessage);
-
         getInstance().isValid = false;
+        if(line > 0)
+            EditorController.getInstance().highlightEditorLine(line);
     }
 
     public static void reportCustomError(int errorCode, int line, String additionalMessage, Object... parameters) {
         String errorMessage = String.format(ErrorDictionary.getMessage(errorCode) + " " + additionalMessage, parameters);
         Console.log(Console.USER_ERROR, errorMessage);
-
         getInstance().isValid = false;
+        if(line > 0)
+            EditorController.getInstance().highlightEditorLine(line);
     }
 }

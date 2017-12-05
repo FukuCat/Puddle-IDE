@@ -41,7 +41,7 @@ public class CallExpressionAnalyzer extends AbstractAnalyzer {
         String signature = FunctionSignatureGenerator.getInstance().toSignature(name, argChecker.getArguments());
         // Resolve
         if(symtab.getCurrentScope().resolve(signature) == null)
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION, "",ctx.getText(),ctx.start.getLine());
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_FUNCTION, ctx.start.getLine(), "",ctx.getText(),ctx.start.getLine());
 
 
     }
@@ -120,7 +120,7 @@ public class CallExpressionAnalyzer extends AbstractAnalyzer {
                     while(!typeStack.isEmpty()){
                         String type2 = typeStack.pop();
                         if(symtab.getCurrentScope().resolve(ctx.getChild(0).getText()) != null)
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, ctx.start.getLine(), "", ctx.getChild(0).getText(), ctx.start.getLine());
                         else if(type1.equals("String") || type2.equals("String"))
                             type1 = "String";
                         else if(type1.equals("Double") || type2.equals("Double"))
@@ -178,7 +178,7 @@ public class CallExpressionAnalyzer extends AbstractAnalyzer {
                                 }
                             } else errorVariable = ctx.getText();
                             if(errorVariable!= null)
-                                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", errorVariable, ctx.start.getLine());
+                                KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", errorVariable, ctx.start.getLine());
                             break;
                         case KotlinParser.NullLiteral:
                             typeStack.push(symtab.PREDEFINED.getSymbol("null").getName());
@@ -200,7 +200,7 @@ public class CallExpressionAnalyzer extends AbstractAnalyzer {
                         String name = v.getType().getName();
                         typeStack.push(name);
                     } else {
-                        KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", ctx.getChild(0).getText(), ctx.start.getLine());
+                        KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }
                 }
 

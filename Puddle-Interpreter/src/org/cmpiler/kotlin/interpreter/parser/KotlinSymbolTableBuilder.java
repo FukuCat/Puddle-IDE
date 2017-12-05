@@ -65,7 +65,7 @@ public class KotlinSymbolTableBuilder extends KotlinParserBaseListener {
                 FunctionSymbol f = ((FunctionSymbol) ctx.scope);
                 if((f.getType().getName().equalsIgnoreCase("void") && symtab.getSymbolFunctionWithReturn().contains(f))
                         || (!f.getType().getName().equalsIgnoreCase("void") && !symtab.getSymbolFunctionWithReturn().contains(f)))
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN, "", a.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN,ctx.start.getLine(),"", a.start.getLine());
 
             }
         }
@@ -84,7 +84,7 @@ public class KotlinSymbolTableBuilder extends KotlinParserBaseListener {
         AnalyzerHandler.getAnalyzer(KotlinFileAnalyzer.class).exitBuildRule(ctx);
         evaluateRules();
         if(symtab.getMainScope()== null){
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MISSING_MAIN, "");
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.MISSING_MAIN,ctx.start.getLine(),"");
         }
     }
 

@@ -16,14 +16,14 @@ public class FunctionValueParameterAnalyzer extends AbstractAnalyzer {
             if(ctx.getChild(0).getChild(0)!= null) {
                 String name = ctx.getChild(0).getChild(0).getText();
                 if (symtab.isSymbolDefinedInCurrentScope(name)) {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE, "", name, ctx.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.MULTIPLE_VARIABLE,ctx.start.getLine(),"", name, ctx.start.getLine());
                 } else {
                     VariableSymbol v = null;
                     if (symtab.getCurrentScope() instanceof MethodSymbol) {
                         ParameterSymbol p = new ParameterSymbol(name);
                         p.setDefNode(ctx);
                         if (ctx.getChild(0).getChildCount() < 3)
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                         else {
                             ctx.symbol = p;
                             Console.log(Console.DEV_CONSOLE, "Parameter added [" + p.getName() + "]");
@@ -33,7 +33,7 @@ public class FunctionValueParameterAnalyzer extends AbstractAnalyzer {
                         FieldSymbol f = new FieldSymbol(name);
                         f.setDefNode(ctx);
                         if (ctx.getChild(0).getChildCount() < 3)
-                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", name, ctx.start.getLine());
+                            KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                         else {
                             ctx.symbol = f;
                             Console.log(Console.DEV_CONSOLE, "Field added [" + f.getName() + "]");
@@ -60,7 +60,7 @@ public class FunctionValueParameterAnalyzer extends AbstractAnalyzer {
                 if (t != null) {
                     v.setType(t);
                 } else {
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE, "", v.getName(), ctx.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", v.getName(), ctx.start.getLine());
                 }
             }
     }
