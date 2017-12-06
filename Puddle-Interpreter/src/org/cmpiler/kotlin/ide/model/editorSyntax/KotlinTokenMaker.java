@@ -75,12 +75,13 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                 }
                 break;
             case Token.COMMENT_EOL:
-                break;
             case Token.SEPARATOR:
-                break;
             case Token.OPERATOR:
-                break;
             case Token.COMMENT_MULTILINE:
+            case Token.LITERAL_NUMBER_DECIMAL_INT:
+            case Token.LITERAL_NUMBER_FLOAT:
+            case Token.LITERAL_STRING_DOUBLE_QUOTE:
+            case Token.WHITESPACE:
                 break;
             default:
                 tokenType = Token.IDENTIFIER;

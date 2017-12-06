@@ -48,9 +48,12 @@ public class EditorController {
         editorTextArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         SyntaxScheme scheme = editorTextArea.getSyntaxScheme();
         scheme.getStyle(Token.OPERATOR).foreground = Color.ORANGE.darker();
-        scheme.getStyle(Token.OPERATOR).font = new Font("Courier New", Font.BOLD, 18);
-        scheme.getStyle(Token.RESERVED_WORD).font = new Font("Courier New", Font.BOLD, 16);
+        scheme.getStyle(Token.OPERATOR).font = new Font("Courier New", Font.BOLD, 16);
+        scheme.getStyle(Token.RESERVED_WORD).font = new Font("Courier New", Font.BOLD, 15);
         scheme.getStyle(Token.SEPARATOR).font = new Font("Courier New", Font.BOLD, 16);
+        scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = Color.GREEN.darker();
+        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.BLUE;
+        scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = Color.BLUE;
         /*
         scheme.getStyle(Token.RESERVED_WORD).background = Color.pink;
         scheme.getStyle(Token.DATA_TYPE).foreground = Color.blue;
@@ -138,19 +141,16 @@ public class EditorController {
 
     public void highlightEditorLine(int line){
         int caret = editorTextArea.getCaretPosition();
-        boolean noHighlight = false;
+        boolean noHighlight = caret == line;
+        if(!noHighlight) {
         String[] lineString = getEditorTextArea().getText().split("\\r?\\n");
         int positionStart = 0;
         int positionEnd = 0;
         for(int i = 0; i < lineString.length && i < line; i++){
-            noHighlight = line == caret;
-            if(noHighlight)
-                break;
             if(i < line - 1)
                 positionStart += lineString[i].length();
             positionEnd+= lineString[i].length();
         }
-        if(!noHighlight) {
         positionStart += line - 1;
         positionEnd += line;
             DefaultHighlighter.DefaultHighlightPainter highlightPainter =
