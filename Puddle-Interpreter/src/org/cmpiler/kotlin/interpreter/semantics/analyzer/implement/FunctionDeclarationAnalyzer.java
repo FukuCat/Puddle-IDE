@@ -83,7 +83,7 @@ public class FunctionDeclarationAnalyzer extends AbstractAnalyzer {
                     type = "void";
                 f.setType(symtab.getDefinedType(type));
                 if(ctx.identifier() != null)
-                    EditorController.getInstance().addAutoCompleteionFunction(ctx.identifier().getText(), f.getName()+":"+type);
+                    EditorController.getInstance().addAutoCompleteionFunction(ctx.identifier().getText(), f.getName(), type);
             }
 
         }

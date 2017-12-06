@@ -12,6 +12,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import java.awt.*;
 import java.util.HashSet;
+import java.util.Queue;
 
 public class EditorController {
 
@@ -116,19 +117,20 @@ public class EditorController {
 
     }
 
-    public void addAutoCompleteionItem(String name){
+    public void addAutoCompleteionVariable(String name, String desc){
         DefaultCompletionProvider provider = ((DefaultCompletionProvider)editorCompletionProvider);
-        provider.addCompletion(new BasicCompletion(provider, name));
+        provider.addCompletion(new BasicCompletion(provider, name, desc));
     }
 
-    public void addAutoCompleteionFunction(String name, String desc){
+    public void addAutoCompleteionFunction(String name, String signature, String desc){
         DefaultCompletionProvider provider = ((DefaultCompletionProvider)editorCompletionProvider);
         provider.addCompletion(new ShorthandCompletion(provider, name,
-                name+"(", desc));
+                signature, desc));
     }
 
     public void clearHighlights(){
-        getEditorTextArea().getHighlighter().removeAllHighlights();
+        editorTextArea.getHighlighter().removeAllHighlights();
+        editorTextArea.removeAllLineHighlights();
     }
 
     public void highlightEditorLine(int start, int end){
@@ -139,9 +141,14 @@ public class EditorController {
         editorTextArea.setCaretPosition(caret);
     }
 
+
+    public int selectedLine(){
+        return editorTextArea.getCaretLineNumber();
+    }
+
     public void highlightEditorLine(int line){
-        int caret = editorTextArea.getCaretPosition();
-        boolean noHighlight = caret == line;
+        int selectedLine = editorTextArea.getCaretLineNumber();
+        boolean noHighlight = selectedLine == line;
         if(!noHighlight) {
         String[] lineString = getEditorTextArea().getText().split("\\r?\\n");
         int positionStart = 0;
@@ -158,6 +165,7 @@ public class EditorController {
             try {
                 editorTextArea.getHighlighter().addHighlight(positionStart, positionEnd,
                         highlightPainter);
+                editorTextArea.addLineHighlight(line-1, DEFAULT_ERROR_HIGHLIGHT_COLOR);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }

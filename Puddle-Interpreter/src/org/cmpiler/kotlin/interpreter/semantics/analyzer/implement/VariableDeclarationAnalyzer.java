@@ -1,9 +1,6 @@
 package org.cmpiler.kotlin.interpreter.semantics.analyzer.implement;
 
-import org.antlr.symtab.ClassSymbol;
-import org.antlr.symtab.FieldSymbol;
-import org.antlr.symtab.Type;
-import org.antlr.symtab.VariableSymbol;
+import org.antlr.symtab.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.ide.controller.EditorController;
@@ -72,11 +69,30 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
                 Type t = symtab.getDefinedType(ctx.type().getText());
                 if (t != null) {
                     v.setType(t);
-                    EditorController.getInstance().addAutoCompleteionItem(v.getName());
+
+                    int endline = -1;
+                    int selectedLine = EditorController.getInstance().selectedLine();
+                    Scope s = symtab.findNonLocalParentScope(symtab.getCurrentScope());
+                    System.out.println(s.getName());
+                    if (s != null) {
+                        if(s instanceof FunctionSymbol){
+                            FunctionSymbol f = (FunctionSymbol)s;
+                            KotlinParser.FunctionDeclarationContext fctx = (KotlinParser.FunctionDeclarationContext) f.getDefNode();
+                            if(fctx.functionBody() != null)
+                                if(fctx.functionBody().block() != null)
+                                    if(fctx.functionBody().block().RCURL() != null)
+                                        endline = fctx.functionBody().block().RCURL().getSymbol().getLine();
+                            if(endline != -1 && selectedLine <= endline && selectedLine >= ctx.start.getLine())
+                                EditorController.getInstance().addAutoCompleteionVariable(v.getName(), v.getType().getName());
+                        }
+                    } else // is global variable
+                        EditorController.getInstance().addAutoCompleteionVariable(v.getName(), v.getType().getName());
                 } else {
                     KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", name, ctx.start.getLine());
                 }
             }
+
+
     }
 
 }

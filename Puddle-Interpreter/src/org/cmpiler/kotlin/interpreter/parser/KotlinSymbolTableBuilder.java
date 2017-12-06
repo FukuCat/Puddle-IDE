@@ -61,11 +61,16 @@ public class KotlinSymbolTableBuilder extends KotlinParserBaseListener {
             ParserRuleContext a  = p.getFirst();
             Scope c = p.getSecond();
             KotlinParser.FunctionDeclarationContext ctx = (KotlinParser.FunctionDeclarationContext) a;
+            int line = ctx.start.getLine();
+            if(ctx.functionBody() != null)
+                if(ctx.functionBody().block() != null)
+                    if(ctx.functionBody().block().RCURL() != null)
+                        line = ctx.functionBody().block().RCURL().getSymbol().getLine();
             if(ctx.scope instanceof FunctionSymbol) {
                 FunctionSymbol f = ((FunctionSymbol) ctx.scope);
                 if((f.getType().getName().equalsIgnoreCase("void") && symtab.getSymbolFunctionWithReturn().contains(f))
                         || (!f.getType().getName().equalsIgnoreCase("void") && !symtab.getSymbolFunctionWithReturn().contains(f)))
-                    KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN,ctx.start.getLine(),"", a.start.getLine());
+                    KotlinCodeValidator.reportCustomError(ErrorDictionary.TYPE_RETURN, line,"", line);
 
             }
         }

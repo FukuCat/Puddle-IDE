@@ -318,6 +318,19 @@ public class SymbolTableHandler extends SymbolTable {
         return null;
     }
 
+    public Scope findNonLocalParentScope(Scope s){
+
+        Scope result = s;
+
+        while(s!= null){
+            if(s instanceof LocalScope)
+                s = s.getEnclosingScope();
+            else break;
+        }
+
+        return s;
+    }
+
     public boolean isSymbolConstant(Symbol symbol){
         return symbolConstant.contains(symbol);
     }

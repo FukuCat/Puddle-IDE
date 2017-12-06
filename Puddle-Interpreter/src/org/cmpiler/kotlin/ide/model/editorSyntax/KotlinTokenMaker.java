@@ -10,12 +10,6 @@ import java.util.HashSet;
 
 public class KotlinTokenMaker extends AbstractTokenMaker {
 
-    public void addVariable(){}
-    public void addDataType(){}
-    public void addFunction(){}
-
-    public void clearAdditionalTokens(){}
-
     @Override
     public boolean getMarkOccurrencesOfTokenType(int type) {
         return type==Token.IDENTIFIER || type==Token.VARIABLE || type==Token.FUNCTION;
