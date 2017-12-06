@@ -84,7 +84,7 @@ public class KotlinSymbolTableBuilder extends KotlinParserBaseListener {
         AnalyzerHandler.getAnalyzer(KotlinFileAnalyzer.class).exitBuildRule(ctx);
         evaluateRules();
         if(symtab.getMainScope()== null){
-            KotlinCodeValidator.reportCustomError(ErrorDictionary.MISSING_MAIN,ctx.start.getLine(),"");
+            KotlinCodeValidator.reportCustomError(ErrorDictionary.MISSING_MAIN,-1,"");
         }
     }
 

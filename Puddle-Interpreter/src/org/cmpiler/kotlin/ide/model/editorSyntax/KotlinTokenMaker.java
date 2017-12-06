@@ -36,20 +36,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
         tokenMap.put("while",  Token.FUNCTION);
         tokenMap.put("do",  Token.FUNCTION);
 
-        tokenMap.put("+", Token.OPERATOR);
-        tokenMap.put("-", Token.OPERATOR);
-        tokenMap.put("*", Token.OPERATOR);
-        tokenMap.put("/", Token.OPERATOR);
-        tokenMap.put("++", Token.OPERATOR);
-        tokenMap.put("--", Token.OPERATOR);
-        tokenMap.put("+=", Token.OPERATOR);
-        tokenMap.put("-=", Token.OPERATOR);
-        tokenMap.put("==", Token.OPERATOR);
-        tokenMap.put(">=", Token.OPERATOR);
-        tokenMap.put("<=", Token.OPERATOR);
-        tokenMap.put(">", Token.OPERATOR);
-        tokenMap.put("<", Token.OPERATOR);
-
         tokenMap.put("Int", Token.DATA_TYPE);
         tokenMap.put("Float", Token.DATA_TYPE);
         tokenMap.put("Double", Token.DATA_TYPE);
@@ -91,6 +77,8 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
             case Token.COMMENT_EOL:
                 break;
             case Token.SEPARATOR:
+                break;
+            case Token.OPERATOR:
                 break;
             case Token.COMMENT_MULTILINE:
                 break;
@@ -144,11 +132,73 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                         case ')':
                             currentTokenType = Token.SEPARATOR;
                             break;
+
+                        case '+':
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '+':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '-':
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '-':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '=':
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '*':
+                        case ':':
+                            currentTokenType = Token.OPERATOR;
+                            break;
+                        case '<':
+                        case '>':
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+
                         case '"':
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
 
                         case '/':
+                            currentTokenType = Token.OPERATOR;
                             if (firstToken==null && i<end-1) {
                                 char next = array[i+1];
                                 switch(next) {
@@ -161,8 +211,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                                     default:
                                         currentTokenType = Token.IDENTIFIER;
                                 }
-                            } else {
-                                currentTokenType = Token.IDENTIFIER;
                             }
                             break;
 
@@ -200,6 +248,77 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.SEPARATOR;
                             break;
+
+                        case '+':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '+':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '-':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '-':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '=':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '*':
+                        case ':':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            break;
+                        case '<':
+                        case '>':
+                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+
                         case '"':
                             addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
@@ -208,6 +327,7 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                         case '/':
                             addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
                             if (i<end-1) {
                                 char next = array[i+1];
                                 switch(next) {
@@ -220,8 +340,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                                     default:
                                         currentTokenType = Token.IDENTIFIER;
                                 }
-                            } else {
-                                currentTokenType = Token.IDENTIFIER;
                             }
                             break;
 
@@ -265,14 +383,84 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.SEPARATOR;
                             break;
+                        case '+':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '+':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '-':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '-':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '=':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '*':
+                        case ':':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            break;
+                        case '<':
+                        case '>':
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
                         case '"':
                             addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
                         case '/':
-                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+                            addToken(text, currentTokenStart,i-1, Token.IDENTIFIER, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
                             if (i<end-1) {
                                 char next = array[i+1];
                                 switch(next) {
@@ -285,8 +473,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                                     default:
                                         currentTokenType = Token.IDENTIFIER;
                                 }
-                            } else {
-                                currentTokenType = Token.IDENTIFIER;
                             }
                             break;
                         default:
@@ -323,9 +509,81 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                             currentTokenStart = i;
                             currentTokenType = Token.LITERAL_STRING_DOUBLE_QUOTE;
                             break;
-                        case '/':
-                            addToken(text, currentTokenStart,i-1, Token.WHITESPACE, newStartOffset+currentTokenStart);
+
+                        case '+':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
                             currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '+':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '-':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '-':
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '=':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+                        case '*':
+                        case ':':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            break;
+                        case '<':
+                        case '>':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
+                            if (firstToken==null && i<end-1) {
+                                char next = array[i+1];
+                                switch(next) {
+                                    case '=':
+                                        currentTokenType = Token.OPERATOR;
+                                        break;
+                                    default:
+                                        currentTokenType = Token.IDENTIFIER;
+                                }
+                            }
+                            break;
+
+                        case '/':
+                            addToken(text, currentTokenStart,i-1, Token.LITERAL_NUMBER_DECIMAL_INT, newStartOffset+currentTokenStart);
+                            currentTokenStart = i;
+                            currentTokenType = Token.OPERATOR;
                             if (i<end-1) {
                                 char next = array[i+1];
                                 switch(next) {
@@ -338,8 +596,6 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                                     default:
                                         currentTokenType = Token.IDENTIFIER;
                                 }
-                            } else {
-                                currentTokenType = Token.IDENTIFIER;
                             }
                             break;
                         default:
@@ -359,6 +615,10 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
 
                 case Token.SEPARATOR:
                     addToken(text, currentTokenStart,i, Token.SEPARATOR, newStartOffset+currentTokenStart);
+                    currentTokenType = Token.NULL;
+                    break;
+                case Token.OPERATOR:
+                    addToken(text, currentTokenStart,i, Token.OPERATOR, newStartOffset+currentTokenStart);
                     currentTokenType = Token.NULL;
                     break;
                 case Token.COMMENT_EOL:

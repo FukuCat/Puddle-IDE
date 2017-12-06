@@ -2,10 +2,7 @@ package org.cmpiler.kotlin.ide.controller;
 
 import org.cmpiler.kotlin.ide.model.editorSyntax.KotlinFoldMaker;
 import org.fife.ui.autocomplete.*;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
 import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -39,11 +36,30 @@ public class EditorController {
         editorTextArea.setEditable(true);
         editorTextArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
         resetCompletionProvider();
+        setEditorStyle();
+
 
         editorScrollArea = new RTextScrollPane(editorTextArea);
         editorScrollArea.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
         InterpreterController.getInstance().startAutoBuild();
     }
+
+    public void setEditorStyle(){
+        editorTextArea.setFont(new Font( "Courier New", Font.PLAIN, 15));
+        SyntaxScheme scheme = editorTextArea.getSyntaxScheme();
+        scheme.getStyle(Token.OPERATOR).foreground = Color.ORANGE.darker();
+        scheme.getStyle(Token.OPERATOR).font = new Font("Courier New", Font.BOLD, 18);
+        scheme.getStyle(Token.RESERVED_WORD).font = new Font("Courier New", Font.BOLD, 16);
+        scheme.getStyle(Token.SEPARATOR).font = new Font("Courier New", Font.BOLD, 16);
+        /*
+        scheme.getStyle(Token.RESERVED_WORD).background = Color.pink;
+        scheme.getStyle(Token.DATA_TYPE).foreground = Color.blue;
+        scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).underline = true;
+        scheme.getStyle(Token.COMMENT_EOL).font = new Font("Georgia",
+                Font.ITALIC, 12);
+                */
+    }
+
 
     public String getCode(){return editorTextArea.getText();}
 
@@ -122,27 +138,31 @@ public class EditorController {
 
     public void highlightEditorLine(int line){
         int caret = editorTextArea.getCaretPosition();
+        boolean noHighlight = false;
         String[] lineString = getEditorTextArea().getText().split("\\r?\\n");
         int positionStart = 0;
         int positionEnd = 0;
         for(int i = 0; i < lineString.length && i < line; i++){
+            noHighlight = line == caret;
+            if(noHighlight)
+                break;
             if(i < line - 1)
                 positionStart += lineString[i].length();
             positionEnd+= lineString[i].length();
         }
+        if(!noHighlight) {
         positionStart += line - 1;
         positionEnd += line;
-        editorTextArea.setCaretPosition(positionStart);
-
-        DefaultHighlighter.DefaultHighlightPainter highlightPainter =
-                new DefaultHighlighter.DefaultHighlightPainter(DEFAULT_ERROR_HIGHLIGHT_COLOR);
-        try {
-            editorTextArea.getHighlighter().addHighlight(positionStart, positionEnd,
-                    highlightPainter);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
+            DefaultHighlighter.DefaultHighlightPainter highlightPainter =
+                    new DefaultHighlighter.DefaultHighlightPainter(DEFAULT_ERROR_HIGHLIGHT_COLOR);
+            try {
+                editorTextArea.getHighlighter().addHighlight(positionStart, positionEnd,
+                        highlightPainter);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
         }
-        editorTextArea.setCaretPosition(caret);
+        //editorTextArea.setCaretPosition(caret);
     }
 
     public RTextScrollPane getEditorScrollArea() {
