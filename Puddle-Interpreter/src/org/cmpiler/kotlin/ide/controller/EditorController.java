@@ -165,7 +165,7 @@ public class EditorController {
             try {
                 editorTextArea.getHighlighter().addHighlight(positionStart, positionEnd,
                         highlightPainter);
-                editorTextArea.addLineHighlight(line-1, DEFAULT_ERROR_HIGHLIGHT_COLOR);
+                //editorTextArea.addLineHighlight(line-1, DEFAULT_ERROR_HIGHLIGHT_COLOR);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
