@@ -23,6 +23,7 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
         tokenMap.put("return", Token.RESERVED_WORD);
 
         tokenMap.put("print", Token.FUNCTION);
+        tokenMap.put("println", Token.FUNCTION);
         tokenMap.put("scan",  Token.FUNCTION);
         tokenMap.put("main",  Token.FUNCTION);
         tokenMap.put("if", Token.FUNCTION);

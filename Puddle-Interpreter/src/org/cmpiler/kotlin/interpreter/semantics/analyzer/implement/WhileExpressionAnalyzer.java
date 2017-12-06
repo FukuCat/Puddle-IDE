@@ -4,6 +4,7 @@ import org.antlr.symtab.LocalScope;
 import org.antlr.symtab.Type;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.cmpiler.kotlin.antlr.KotlinParser;
+import org.cmpiler.kotlin.interpreter.semantics.LoopScope;
 import org.cmpiler.kotlin.utils.ErrorDictionary;
 import org.cmpiler.kotlin.interpreter.semantics.KotlinCodeValidator;
 import org.cmpiler.kotlin.interpreter.semantics.analyzer.AbstractAnalyzer;
@@ -13,7 +14,7 @@ public class WhileExpressionAnalyzer  extends AbstractAnalyzer {
     @Override
     public void enterBuildRule(ParserRuleContext context) {
         KotlinParser.WhileExpressionContext ctx = (KotlinParser.WhileExpressionContext) context;
-        LocalScope l = new LocalScope(symtab.getCurrentScope());
+        LoopScope l = new LoopScope(ctx.scope);
         ctx.scope = l;
         symtab.pushScope(l);
     }

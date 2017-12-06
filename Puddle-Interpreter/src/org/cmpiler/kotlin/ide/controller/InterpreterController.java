@@ -14,6 +14,7 @@ public class InterpreterController {
     private boolean isRunning;
     private boolean isBuilding;
     private boolean isExecuting;
+    private boolean isStopped;
     protected Semaphore semBuild;
     protected Semaphore semRunning;
     protected Semaphore semBuilding;

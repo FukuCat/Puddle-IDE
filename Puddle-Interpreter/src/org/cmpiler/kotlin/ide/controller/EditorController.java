@@ -80,16 +80,13 @@ public class EditorController {
 
         // Add completions for all Java keywords. A BasicCompletion is just
         // a straightforward word completion.
-        provider.addCompletion(new BasicCompletion(provider, "case"));
         provider.addCompletion(new BasicCompletion(provider, "return"));
         provider.addCompletion(new BasicCompletion(provider, "if"));
         provider.addCompletion(new BasicCompletion(provider, "for"));
         provider.addCompletion(new BasicCompletion(provider, "while"));
-        provider.addCompletion(new BasicCompletion(provider, "do"));
 
         provider.addCompletion(new BasicCompletion(provider, "val"));
         provider.addCompletion(new BasicCompletion(provider, "var"));
-        provider.addCompletion(new BasicCompletion(provider, "class"));
         provider.addCompletion(new BasicCompletion(provider, "fun"));
 
         provider.addCompletion(new BasicCompletion(provider, "Int"));
@@ -106,10 +103,14 @@ public class EditorController {
         provider.addCompletion(new BasicCompletion(provider, "StringArray"));
         provider.addCompletion(new BasicCompletion(provider, "CharArray"));
 
-        provider.addCompletion(new ShorthandCompletion(provider, "prt",
-                "print(", "print(String)"));
-        provider.addCompletion(new ShorthandCompletion(provider, "scn",
-                "scan(", "scan(String)"));
+        provider.addCompletion(new ShorthandCompletion(provider, "_prt",
+                "println(\"text\")", "println(String)"));
+        provider.addCompletion(new ShorthandCompletion(provider, "_scn",
+                "scan(\"text\")", "scan(String)"));
+        provider.addCompletion(new ShorthandCompletion(provider, "_main",
+                "fun main(args:StringArray){\n\n}", "fun main()"));
+        provider.addCompletion(new ShorthandCompletion(provider, "_func",
+                "fun func(){\n\n}", "fun func()"));
 
         editorCompletionProvider = provider;
         editorAutoCompletion = new AutoCompletion(editorCompletionProvider);

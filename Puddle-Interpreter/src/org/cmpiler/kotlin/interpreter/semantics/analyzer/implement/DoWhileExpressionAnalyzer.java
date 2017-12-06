@@ -5,6 +5,7 @@ import org.antlr.symtab.Type;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.interpreter.semantics.KotlinCodeValidator;
+import org.cmpiler.kotlin.interpreter.semantics.LoopScope;
 import org.cmpiler.kotlin.interpreter.semantics.analyzer.AbstractAnalyzer;
 import org.cmpiler.kotlin.utils.ErrorDictionary;
 import org.cmpiler.kotlin.utils.ExpressionEvaluator;
@@ -13,7 +14,7 @@ public class DoWhileExpressionAnalyzer extends AbstractAnalyzer {
     @Override
     public void enterBuildRule(ParserRuleContext context) {
         KotlinParser.DoWhileExpressionContext ctx = (KotlinParser.DoWhileExpressionContext) context;
-        LocalScope l = new LocalScope(symtab.getCurrentScope());
+        LoopScope l = new LoopScope(ctx.scope);
         ctx.scope = l;
         symtab.pushScope(l);
     }

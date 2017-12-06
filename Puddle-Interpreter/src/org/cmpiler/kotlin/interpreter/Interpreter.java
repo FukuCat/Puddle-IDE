@@ -125,7 +125,7 @@ public class Interpreter {
             // will check if a symbol has been defined more than once in a scope
             treeWalker.walk(new SymbolTableBuilder1(), executionPoint); //TODO: make another listener solely for highlighting
             SymbolTableHandler.getInstance().printTable();
-            Console.log(Console.USER_CONSOLE, "Execution done.");
+            Console.log(Console.USER_CONSOLE, "Execution done....");
         } else
             Console.log(Console.USER_ERROR, "Code contains errors... Please rebuild code and run again.");
     }

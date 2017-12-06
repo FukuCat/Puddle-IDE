@@ -197,8 +197,11 @@ public class CallExpressionAnalyzer extends AbstractAnalyzer {
                 else if (ctx.getChild(0) instanceof KotlinParser.SimpleIdentifierContext) {
                     VariableSymbol v = (VariableSymbol)symtab.getCurrentScope().resolve(ctx.getChild(0).getText());
                     if(v != null){
+                        if(v.getType() != null){
                         String name = v.getType().getName();
                         typeStack.push(name);
+                        }
+                        typeStack.push(symtab.PREDEFINED.getSymbol("null").getName());
                     } else {
                         KotlinCodeValidator.reportCustomError(ErrorDictionary.UNDECLARED_TYPE,ctx.start.getLine(),"", ctx.getChild(0).getText(), ctx.start.getLine());
                     }

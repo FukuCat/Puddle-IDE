@@ -6,6 +6,7 @@ import org.cmpiler.kotlin.antlr.KotlinParser;
 import org.cmpiler.kotlin.ide.controller.EditorController;
 import org.cmpiler.kotlin.interpreter.parser.SymbolTableHandler;
 import org.cmpiler.kotlin.interpreter.semantics.KotlinCodeValidator;
+import org.cmpiler.kotlin.interpreter.semantics.LoopScope;
 import org.cmpiler.kotlin.interpreter.semantics.analyzer.AbstractAnalyzer;
 import org.cmpiler.kotlin.utils.ErrorDictionary;
 import org.cmpiler.kotlin.utils.console.Console;
@@ -84,6 +85,8 @@ public class VariableDeclarationAnalyzer extends AbstractAnalyzer {
                                         endline = fctx.functionBody().block().RCURL().getSymbol().getLine();
                             if(endline != -1 && selectedLine <= endline && selectedLine >= ctx.start.getLine())
                                 EditorController.getInstance().addAutoCompleteionVariable(v.getName(), v.getType().getName());
+                        } else {
+                            EditorController.getInstance().addAutoCompleteionVariable(v.getName(), v.getType().getName());
                         }
                     } else // is global variable
                         EditorController.getInstance().addAutoCompleteionVariable(v.getName(), v.getType().getName());
