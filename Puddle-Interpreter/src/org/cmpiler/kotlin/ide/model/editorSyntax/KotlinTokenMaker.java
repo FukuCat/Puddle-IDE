@@ -74,10 +74,10 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                     tokenType = value;
                 }
                 break;
+            case Token.COMMENT_MULTILINE:
             case Token.COMMENT_EOL:
             case Token.SEPARATOR:
             case Token.OPERATOR:
-            case Token.COMMENT_MULTILINE:
             case Token.LITERAL_NUMBER_DECIMAL_INT:
             case Token.LITERAL_NUMBER_FLOAT:
             case Token.LITERAL_STRING_DOUBLE_QUOTE:
@@ -615,11 +615,13 @@ public class KotlinTokenMaker extends AbstractTokenMaker {
                     break;
 
                 case Token.SEPARATOR:
-                    addToken(text, currentTokenStart,i, Token.SEPARATOR, newStartOffset+currentTokenStart);
+                    addToken(text, currentTokenStart,i-1, Token.SEPARATOR, newStartOffset+currentTokenStart);
+                    i--;
                     currentTokenType = Token.NULL;
                     break;
                 case Token.OPERATOR:
-                    addToken(text, currentTokenStart,i, Token.OPERATOR, newStartOffset+currentTokenStart);
+                    addToken(text, currentTokenStart,i-1, Token.OPERATOR, newStartOffset+currentTokenStart);
+                    i--;
                     currentTokenType = Token.NULL;
                     break;
                 case Token.COMMENT_EOL:
